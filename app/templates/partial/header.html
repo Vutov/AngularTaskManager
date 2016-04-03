@@ -1,0 +1,36 @@
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#/">Home</a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul ng-if="authService.isAnonymous()" class="nav navbar-nav">
+                <li><a href="#/login" class="button">Login</a></li>
+                <li><a href="#/register" class="button">Register</a></li>
+            </ul>
+
+            <ul ng-if="authService.isNormalUser()" class="nav navbar-nav">
+                <li><a href="#/">User Dashboard</a></li>
+                <li><a href="#/profile">User Profile</a></li>
+                <li><a ng-click="logout()">Logout</a></li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li ng-if="authService.isLoggedIn()">
+                    <span>{{authService.getCurrentUser().username}}</span>
+                </li>
+                <li ng-if="authService.isAdmin()" class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Administrator <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Action</a></li>
+                        <li><a href="#">Another action</a></li>
+                        <li><a href="#">Something else here</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="#">Separated link</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

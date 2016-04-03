@@ -1,0 +1,61 @@
+<form name="form" ng-app="app" ng-submit="register(userData)">
+    <h2>Register</h2>
+
+    <div class="control-group" ng-class="{true: 'error'}[submitted && form.username.$invalid]">
+        <label class="control-label" for="username">Username</label>
+        <div class="controls">
+            <input type="text" id="username" name="username" ng-model="userData.Username" required />
+            <span class="help-inline" ng-show="submitted && form.username.$error.required">Required</span>
+        </div>
+    </div>
+
+    <div class="control-group" ng-class="{true: 'error'}[submitted && form.password.$invalid]">
+        <label class="control-label" for="password">Password</label>
+        <div class="controls">
+            <input type="password" id="password" name="password" ng-model="userData.Password" required ng-minlength="6" ng-maxlength="100" />
+            <span class="help-inline" ng-show="submitted && form.password.$error.required">Required</span>
+            <span class="help-inline" ng-show="submitted && form.password.$error.minlength">Password has to be at least 6 symbols</span>
+            <span class="help-inline" ng-show="submitted && form.password.$error.maxlength">Password has to be no more than 100 symbols</span>
+        </div>
+    </div>
+
+    <div class="control-group" ng-class="{true: 'error'}[submitted && form.confirmPassword.$invalid]">
+        <label class="control-label" for="confirmPassword">Confirm Password</label>
+        <div class="controls">
+            <input type="password" id="confirmPassword" name="confirmPassword" ng-model="userData.ConfirmPassword" required ng-minlength="6" ng-maxlength="100" ng-compare-passwords="password" />
+            <span class="help-inline" ng-show="submitted && form.confirmPassword.$error.required">Required</span>
+            <span class="help-inline" ng-show="submitted && form.confirmPassword.$error.minlength">Password has to be at least 6 symbols</span>
+            <span class="help-inline" ng-show="submitted && form.confirmPassword.$error.maxlength">Password has to be no more than 100 symbols</span>
+            <span class="help-inline" ng-show="submitted && form.confirmPassword.$error.matchingPasswords">Passwords does not match</span>
+        </div>
+    </div>
+
+    <div class="control-group" ng-class="{true: 'error'}[submitted && form.name.$invalid]">
+        <label class="control-label" for="name">Name</label>
+        <div class="controls">
+            <input type="text" id="name" name="name" ng-model="userData.Name" required />
+            <span class="help-inline" ng-show="submitted && form.name.$error.required">Required</span>
+        </div>
+    </div>
+
+    <div class="control-group" ng-class="{true: 'error'}[submitted && form.email.$invalid]">
+        <label class="control-label" for="email">Your email address</label>
+        <div class="controls">
+            <input type="email" id="email" name="email" ng-model="userData.Email" required />
+            <span class="help-inline" ng-show="submitted && form.email.$error.required">Required</span>
+            <span class="help-inline" ng-show="submitted && form.email.$error.email">Invalid email</span>
+        </div>
+    </div>
+
+    <div class="control-group" ng-class="{true: 'error'}[submitted && form.gender.$invalid]">
+        <label class="control-label" for="gender">Gender</label>
+        <div class="controls">
+            <select id="gender" name="gender" ng-model="userData.Gender" required>
+                <option ng-repeat="gender in genders" value="{{gender.id}}">{{gender.name}}</option>
+            </select>
+            <span class="help-inline" ng-show="submitted && form.gender.$error.required">Required</span>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-large" ng-click="submitted=true">Register</button>
+</form>

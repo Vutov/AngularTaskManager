@@ -1,0 +1,11 @@
+﻿body {
+    margin: 10px;
+}
+
+#app-content {
+    margin-top: 10px;
+}
+
+footer > div {
+    text-align: center;
+}

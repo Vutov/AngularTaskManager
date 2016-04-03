@@ -1,0 +1,21 @@
+<form name="form" ng-app="app" ng-submit="login(userData)">
+    <h2>Login</h2>
+
+    <div class="control-group" ng-class="{true: 'error'}[submitted && form.username.$invalid]">
+        <label class="control-label" for="username">Username</label>
+        <div class="controls">
+            <input type="text" id="username" name="username" ng-model="userData.Username" required />
+            <span class="help-inline" ng-show="submitted && form.username.$error.required">Required</span>
+        </div>
+    </div>
+
+    <div class="control-group" ng-class="{true: 'error'}[submitted && form.password.$invalid]">
+        <label class="control-label" for="password">Password</label>
+        <div class="controls">
+            <input type="password" id="password" name="password" ng-model="userData.Password" required />
+            <span class="help-inline" ng-show="submitted && form.password.$error.required">Required</span>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-large" ng-click="submitted=true">Login</button>
+</form>
