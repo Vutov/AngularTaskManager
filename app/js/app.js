@@ -2,18 +2,14 @@
 
 var app = angular.module('app', ['ngRoute', 'ngResource', 'ui.bootstrap.pagination']);
 
-app.constant('baseServiceUrl', 'http://softuni-social-network.azurewebsites.net');
+app.constant('baseServiceUrl', '/api/');
 app.constant('pageSize', 5);
+app.constant('_', window._);
 
 app.config(function ($routeProvider) {
-    $routeProvider.when('#/', {
-        templateUrl: 'templates/home.html',
-        controller: 'HomeController'
-    });
-
-    $routeProvider.when('/user/home', {
-        templateUrl: 'templates/home.html',
-        controller: 'HomeController'
+    $routeProvider.when('/', {
+        templateUrl: 'templates/dashboard.html',
+        controller: 'DashboardController'
     });
 
     $routeProvider.when('/login', {
@@ -24,6 +20,16 @@ app.config(function ($routeProvider) {
     $routeProvider.when('/register', {
         templateUrl: 'templates/register.html',
         controller: 'RegisterController'
+    });
+
+    $routeProvider.when('/projects/:id', {
+        templateUrl: 'templates/project.html',
+        controller: 'ProjectController'
+    });
+
+    $routeProvider.when('/projects/:id/edit', {
+        templateUrl: 'templates/project.html',
+        controller: 'ProjectController'
     });
 
     $routeProvider.otherwise({
@@ -37,6 +43,11 @@ app.run(function ($rootScope, $location, authService) {
         var currentURI = $location.path().toLowerCase();
         if (!authService.isLoggedIn() &&
             allowedGuestURI.indexOf(currentURI) === -1) {
+            $location.path('/');
+        }
+
+        if (authService.isLoggedIn() &&
+            allowedGuestURI.indexOf(currentURI) !== -1) {
             $location.path('/');
         }
     });

@@ -6,7 +6,7 @@ app.factory('authService',
             login: function(userData, success, error) {
                 var request = {
                     method: 'POST',
-                    url: baseServiceUrl + '/api/users/Login',
+                    url: baseServiceUrl + 'users/Login',
                     data: userData
                 };
                 $http(request).success(function(data) {
@@ -18,7 +18,7 @@ app.factory('authService',
             register: function(userData, success, error) {
                 var request = {
                     method: 'POST',
-                    url: baseServiceUrl + '/api/users/Register',
+                    url: baseServiceUrl + 'users/Register',
                     data: userData
                 };
                 $http(request).success(function(data) {
@@ -30,7 +30,7 @@ app.factory('authService',
             logout: function() {
                 var request = {
                     method: 'POST',
-                    url: baseServiceUrl + '/api/users/Logout'
+                    url: baseServiceUrl + 'users/Logout'
                 };
                 $http(request).success(function(data) {
                     delete sessionStorage['currentUser'];
@@ -43,14 +43,23 @@ app.factory('authService',
                 if (userObject) {
                     return JSON.parse(sessionStorage['currentUser']);
                 }
+
+                // TODO REMOVE when has api
+                return {username: "Mocked", isAdmin: true}
             },
 
             isAnonymous : function() {
-                return sessionStorage['currentUser'] == undefined;
+                //return sessionStorage['currentUser'] == undefined;
+
+                // TODO REMOVE when has api
+                return false;
             },
 
             isLoggedIn : function() {
-                return sessionStorage['currentUser'] != undefined;
+                //return sessionStorage['currentUser'] != undefined;
+
+                // TODO REMOVE when has api
+                return true;
             },
 
             isNormalUser : function() {
@@ -63,6 +72,8 @@ app.factory('authService',
                 return (currentUser != undefined) && (currentUser.isAdmin);
             },
 
+
+            // TODO Rework when has api
             //getAuthHeaders : function() {
             //    var headers = {};
             //    var currentUser = this.getCurrentUser();

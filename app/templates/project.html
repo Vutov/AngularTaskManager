@@ -1,0 +1,36 @@
+﻿<h2 class="projectView">{{projectView}}</h2>
+<div>
+    <form name="projectForm">
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name" placeholder="Project Name" ng-disabled="{{!isEdit}}" ng-model="project.name">
+        </div>
+        <div class="form-group">
+            <label for="leader">Leader</label>
+            <select class="form-control" id="leader" ng-disabled="{{!isEdit}}" ng-model="project.leader">
+                <option ng-if="isEdit" ng-repeat="leader in leaders" ng-selected="{{leader == project.leader}}">{{leader}}</option>
+                <option ng-if="!isEdit">{{project.leader}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="key">Project Key</label>
+            <input type="text" class="form-control" id="key" placeholder="Project Key" ng-disabled="{{!isEdit}}" ng-model="project.key">
+        </div>
+        <div class="form-group">
+            <label for="priorities">Priorities (comma separated)</label>
+            <input type="text" class="form-control" id="priorities" placeholder="Available Priorities For The Issues" ng-disabled="{{!isEdit}}" ng-model="project.priorities">
+        </div>
+        <div class="form-group">
+            <label for="labels">Labels (comma separated)</label>
+            <input type="text" class="form-control" id="labels" placeholder="Labels" ng-disabled="{{!isEdit}}" ng-model="project.labels">
+            <br>
+        </div>
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea class="form-control" placeholder="Description" id="description" ng-disabled="{{!isEdit}}" ng-model="project.description">{{project.description}}</textarea>
+        </div>
+        <button ng-if="isProjectLeader()" type="submit" ng-click="addIssue()" class="btn btn-success">Add Issue</button>
+        <button ng-if="isEdit" type="submit" ng-click="saveProject(project)" class="btn btn-success">Save</button>
+        <button ng-if="!isEdit && isProjectLeader()" type="submit" ng-click="editProject()" class="btn btn-success">Edit Project</button>
+    </form>
+</div>
