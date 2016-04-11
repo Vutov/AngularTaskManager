@@ -2,20 +2,20 @@
     <h1>Dashboard</h1>
     <table class="table table-striped">
         <thead>
-        <tr>
-            <td class="hoverable" ng-click="order('issue')">
-                Issue
-                <span class="sortorder" ng-show="predicate === 'issue'" ng-class="{reverse:reverse}"></span>
-            </td>
-            <td class="hoverable" ng-click="order('project')">
-                Project
-                <span class="sortorder" ng-show="predicate === 'project'" ng-class="{reverse:reverse}"></span>
-            </td>
-            <td class="hoverable" ng-click="order('date')">
-                Due Date
-                <span class="sortorder" ng-show="predicate === 'date'" ng-class="{reverse:reverse}"></span>
-            </td>
-        </tr>
+            <tr>
+                <td class="hoverable" ng-click="order('issue')">
+                    Issue
+                    <span class="sortorder" ng-show="predicate === 'issue'" ng-class="{reverse:reverse}"></span>
+                </td>
+                <td class="hoverable" ng-click="order('project')">
+                    Project
+                    <span class="sortorder" ng-show="predicate === 'project'" ng-class="{reverse:reverse}"></span>
+                </td>
+                <td class="hoverable" ng-click="order('date')">
+                    Due Date
+                    <span class="sortorder" ng-show="predicate === 'date'" ng-class="{reverse:reverse}"></span>
+                </td>
+            </tr>
         </thead>
         <tbody>
             <tr ng-repeat="project in projects | orderBy:predicate:reverse">
@@ -29,10 +29,10 @@
         <button class="btn btn-lg btn-success">Add New Project</button>
         <button class="btn btn-lg btn-success">Add New Issue</button>
     </div>
+
+    <pagination total-items="allProjects()" ng-model="projectsParams.startPage"
+                items-per-page="projectsParams.pageSize" ng-change="getProjects()"
+                max-size="9" boundary-links="true">
+    </pagination>
+
 </div>
-
-
-<pagination total-items="allProjects()" ng-model="projectsParams.startPage"
-            items-per-page="projectsParams.pageSize" ng-change="getProjects()"
-            max-size="9" boundary-links="true">
-</pagination>

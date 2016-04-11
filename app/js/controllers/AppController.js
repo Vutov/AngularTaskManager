@@ -5,9 +5,15 @@ app.controller('AppController',
         $scope.authService = authService;
 
         $scope.logout = function() {
-            authService.logout();
-            notifyService.showInfo("Logout successful");
-            $location.path('/');
+            authService.logout(
+                function success() {
+                    notifyService.showInfo("Logout successful");
+                    $location.path("/");
+                },
+                function error(err) {
+                    notifyService.showError("Logout failed", err);
+                }
+            );
         };
     }
 );

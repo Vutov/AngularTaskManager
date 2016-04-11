@@ -2,36 +2,47 @@
 
 app.factory('authService',
     function ($http, baseServiceUrl) {
+        var login = function(userData, success, error) {
+            var loginData = {
+                Username: userData.Email,
+                Password: userData.Password,
+                grant_type: "password"
+            };
+            
+            var request = {
+                method: 'POST',
+                url: baseServiceUrl + 'Token',
+                data: loginData
+            };
+
+            $http(request).success(function(data) {
+                sessionStorage['currentUser'] = JSON.stringify(data);
+                success(data);
+            }).error(error);
+        };
+
         return {
-            login: function(userData, success, error) {
-                var request = {
-                    method: 'POST',
-                    url: baseServiceUrl + 'users/Login',
-                    data: userData
-                };
-                $http(request).success(function(data) {
-                    sessionStorage['currentUser'] = JSON.stringify(data);
-                    success(data);
-                }).error(error);
-            },
+            login: login,
 
             register: function(userData, success, error) {
                 var request = {
                     method: 'POST',
-                    url: baseServiceUrl + 'users/Register',
+                    url: baseServiceUrl + 'Account/Register',
                     data: userData
                 };
+
                 $http(request).success(function(data) {
-                    sessionStorage['currentUser'] = JSON.stringify(data);
-                    success(data);
+                    login(userData, success, error);
+
                 }).error(error);
             },
             
-            logout: function() {
+            logout: function (success, error) {
                 var request = {
                     method: 'POST',
-                    url: baseServiceUrl + 'users/Logout'
+                    url: baseServiceUrl + 'Account/Logout'
                 };
+
                 $http(request).success(function(data) {
                     delete sessionStorage['currentUser'];
                     success(data);
@@ -44,22 +55,21 @@ app.factory('authService',
                     return JSON.parse(sessionStorage['currentUser']);
                 }
 
-                // TODO REMOVE when has api
-                return {username: "Mocked", isAdmin: true}
+                return { username: "Mocked", isAdmin: true }
             },
 
             isAnonymous : function() {
-                //return sessionStorage['currentUser'] == undefined;
+                return sessionStorage['currentUser'] == undefined;
 
-                // TODO REMOVE when has api
-                return false;
+                //// TODO REMOVE when has api
+                //return false;
             },
 
             isLoggedIn : function() {
-                //return sessionStorage['currentUser'] != undefined;
+                return sessionStorage['currentUser'] != undefined;
 
-                // TODO REMOVE when has api
-                return true;
+                //// TODO REMOVE when has api
+                //return true;
             },
 
             isNormalUser : function() {
