@@ -7,7 +7,7 @@ app.factory('issueService',
             getUsersIssues: function (params, success, error) {
                 var request = {
                     method: 'GET',
-                    url: baseServiceUrl + 'issues/me?orderBy=Project.Name desc, IssueKey&pageSize=2&pageNumber=1',
+                    url: baseServiceUrl + 'issues/me?orderBy=DueDate desc, IssueKey&pageSize=' + params.pageSize + '&pageNumber=' + params.startPage,
                     headers: authService.getAuthHeaders()
                 };
 

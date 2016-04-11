@@ -16,8 +16,21 @@ app.factory('authService',
             };
 
             $http(request).success(function (data) {
-                sessionStorage['currentUser'] = JSON.stringify(data);
-                success(data);
+                var userData = data;
+
+                var userInfoRequest = {
+                    method: 'GET',
+                    url: baseServiceUrl + '/users/me',
+                    headers: { Authorization: 'Bearer ' + userData.access_token }
+                };
+
+                $http(userInfoRequest).success(function (data) {
+                    userData.isAdmin = data.isAdmin;
+                    sessionStorage['currentUser'] = JSON.stringify(userData);
+                    success(data);
+
+                }).error(error);
+
             }).error(error);
         },
         getAuthHeaders = function () {
