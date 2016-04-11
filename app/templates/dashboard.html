@@ -20,13 +20,13 @@
         <tbody>
             <tr ng-repeat="issue in issues | orderBy:predicate:reverse">
                 <td>{{issue.Title}}</td>
-                <td class="hoverable" ng-click="viewProject(project.id)">{{issue.Project.Name}}</td>
+                <td class="hoverable" ng-click="viewProject(issue.Project.Id)">{{issue.Project.Name}}</td>
                 <td>{{issue.DueDate | date:'dd-MM-yyyy'}}</td>
             </tr>
         </tbody>
     </table>
     <div ng-if="authService.isAdmin()">
-        <button class="btn btn-lg btn-success">Add New Project</button>
+        <button class="btn btn-lg btn-success" ng-click="addProject()">Add New Project</button>
         <button class="btn btn-lg btn-success">Add New Issue</button>
     </div>
 

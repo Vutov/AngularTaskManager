@@ -9,7 +9,7 @@ app.constant('_', window._);
 app.config(function ($routeProvider) {
     $routeProvider.when('/', {
         templateUrl: 'templates/dashboard.html',
-        controller: 'DashboardController'
+        controller: 'IssuesController'
     });
 
     $routeProvider.when('/login', {
@@ -22,16 +22,22 @@ app.config(function ($routeProvider) {
         controller: 'RegisterController'
     });
 
+    $routeProvider.when('/projects/add', {
+        templateUrl: 'templates/project.html',
+        controller: 'AddProjectController'
+    });
+
     $routeProvider.when('/projects/:id', {
         templateUrl: 'templates/project.html',
-        controller: 'ProjectController'
+        controller: 'ViewProjectController'
     });
 
     $routeProvider.when('/projects/:id/edit', {
         templateUrl: 'templates/project.html',
-        controller: 'ProjectController'
+        controller: 'EditProjectController'
     });
 
+   
     $routeProvider.otherwise({
         redirectTo: '/'
     });

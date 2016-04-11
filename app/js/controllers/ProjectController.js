@@ -1,38 +1,27 @@
 ﻿'use strict';
 
-app.controller('ProjectController',
-   function ($scope, $routeParams, $route, $location, notifyService, pageSize) {
-       $scope.isEdit = false;
+app.controller('ViewProjectController',
+   function ($scope, $routeParams, $location, projectService, notifyService, pageSize, _, authService) {
+       $scope.isDisabled = true;
+       $scope.projectView = "Project";
 
-       if ($route.current.originalPath.indexOf("edit") !== -1) {
-           $scope.isEdit = true;
-       }
+       projectService.getProjectById(
+              $routeParams.id,
+              function success(data) {
+                  data.StringPriorities =  _(data.Priorities).map(c => c.Name).value().join(", ");
+                  data.StringLabels = _(data.Labels).map(c => c.Name).value().join(", ");
+                  $scope.project = data;
+                  if (data.Lead.Username === authService.getCurrentUser().userName) {
+                      $scope.isProjectLeader = true;
+                  } else {
+                      $scope.isProjectLeader = false;
+                  }
 
-       var id = $routeParams.id;
-       console.log(id);
-
-       // TODO call service
-       if ($scope.isEdit) {
-           $scope.projectView = "Edit Project";
-           $scope.project = {
-               name: "SIT", leader: "Pesho", key: "1234", priorities: "Low, Medium, Urgent",
-               labels: "Softuni, software", description: "Project for managing issues for specific projects with priorities, status transitions and labels"
-           }
-
-           // TODO get from service
-           $scope.leaders = ["Pesho", 'IVAN'];
-       } else {
-           $scope.projectView = "Project";
-           $scope.project = {
-               name: "SIT", leader: "Pesho", key: "1234", priorities: "Low, Medium, Urgent",
-               labels: "Softuni, software", description: "Project for managing issues for specific projects with priorities, status transitions and labels"
-           }
-       }
-
-       $scope.isProjectLeader = function () {
-           // TODO call service or check id against leader id, depeding on what is returned from the server
-           return true;
-       }
+                  // TODO transition id 
+              },
+              function error(err) {
+                  notifyService.showError("Failed loading data...", err);
+              });
 
        $scope.addIssue = function () {
            //$location.path("projects/" + id + "/add-issue");
@@ -40,7 +29,61 @@ app.controller('ProjectController',
        }
 
        $scope.editProject = function () {
-           $location.path("projects/" + id + "/edit");
+           $location.path("projects/" + $routeParams.id + "/edit");
+       }
+   }
+);
+
+app.controller('EditProjectController',
+   function ($scope, $routeParams, $location, projectService, notifyService, pageSize, _, authService, userService) {
+       $scope.isDisabled = false;
+       $scope.projectView = "Edit Project";
+
+       projectService.getProjectById(
+              $routeParams.id,
+              function success(data) {
+                  data.StringPriorities =  _(data.Priorities).map(c => c.Name).value().join(", ");
+                  data.StringLabels = _(data.Labels).map(c => c.Name).value().join(", ");
+                  $scope.project = data;
+                  if (data.Lead.Username === authService.getCurrentUser().userName) {
+                      $scope.isProjectLeader = true;
+                  } else {
+                      $scope.isProjectLeader = false;
+                  }
+
+                  // TODO transition id 
+
+                  userService.getAllUsers(function success(data) {
+                      $scope.leaders = data.sort(function(a, b) {
+                          return a.Username.localeCompare(b.Username);
+                      });
+                  }, function error(err) {
+                      notifyService.showError("Failed loading data...", err);
+                  });
+              },
+              function error(err) {
+                  notifyService.showError("Failed loading data...", err);
+              });
+
+       $scope.addIssue = function () {
+           //$location.path("projects/" + id + "/add-issue");
+           throw Error("Implement!")
+       }
+
+       $scope.saveProject = function (projectData) {
+           // TODO call service
+       }
+   }
+);
+
+app.controller('AddProjectController',
+   function ($scope, $routeParams, $route, $location, notifyService, pageSize) {
+       $scope.isDisabled = false;
+       $scope.projectView = "Add Project";
+
+       $scope.addIssue = function () {
+           //$location.path("projects/" + id + "/add-issue");
+           throw Error("Implement!")
        }
 
        $scope.saveProject = function (projectData) {
