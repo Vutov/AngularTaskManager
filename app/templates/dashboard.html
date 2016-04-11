@@ -18,10 +18,10 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="project in projects | orderBy:predicate:reverse">
-                <td>{{project.issue}}</td>
-                <td class="hoverable" ng-click="viewProject(project.id)">{{project.project}}</td>
-                <td>{{project.date}}</td>
+            <tr ng-repeat="issue in issues | orderBy:predicate:reverse">
+                <td>{{issue.Title}}</td>
+                <td class="hoverable" ng-click="viewProject(project.id)">{{issue.Project.Name}}</td>
+                <td>{{issue.DueDate}}</td>
             </tr>
         </tbody>
     </table>
@@ -30,9 +30,8 @@
         <button class="btn btn-lg btn-success">Add New Issue</button>
     </div>
 
-    <pagination total-items="allProjects()" ng-model="projectsParams.startPage"
-                items-per-page="projectsParams.pageSize" ng-change="getProjects()"
+    <pagination total-items="allIssues" ng-model="projectsParams.startPage"
+                items-per-page="projectsParams.pageSize" ng-change="getIssues()"
                 max-size="9" boundary-links="true">
     </pagination>
-
 </div>
