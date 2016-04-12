@@ -23,6 +23,22 @@ app.controller('ViewProjectController',
                   notifyService.showError("Failed loading data...", err);
               });
 
+       $scope.predicate = 'date';
+       $scope.reverse = true;
+       $scope.order = function (predicate) {
+           $scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
+           $scope.predicate = predicate;
+       };
+
+       projectService.getIssuesForProjectById(
+              $routeParams.id,
+              function success(data) {
+                  $scope.issues = data;
+              },
+              function error(err) {
+                  notifyService.showError("Failed loading data...", err);
+              });
+
        $scope.addIssue = function () {
            //$location.path("projects/" + id + "/add-issue");
            throw Error("Implement!")

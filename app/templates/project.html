@@ -37,3 +37,32 @@
         <button ng-if="isDisabled && (isProjectLeader || authService.isAdmin())" type="submit" ng-click="editProject()" class="btn btn-success">Edit Project</button>
     </form>
 </div>
+
+<div ng-if="isDisabled" class="dashboard">
+    <h1>Issues</h1>
+    <table class="table table-striped" ng-if="issues.length > 0">
+        <thead>
+            <tr>
+                <td class="hoverable" ng-click="order('title')">
+                    Title
+                    <span class="sortorder" ng-show="predicate === 'title'" ng-class="{reverse:reverse}"></span>
+                </td>
+                <td class="hoverable" ng-click="order('description')">
+                    Description
+                    <span class="sortorder" ng-show="predicate === 'description'" ng-class="{reverse:reverse}"></span>
+                </td>
+                <td class="hoverable" ng-click="order('date')">
+                    Due Date
+                    <span class="sortorder" ng-show="predicate === 'date'" ng-class="{reverse:reverse}"></span>
+                </td>
+                <td class="hoverable" ng-click="order('assignee')">
+                    Assignee
+                    <span class="sortorder" ng-show="predicate === 'assignee'" ng-class="{reverse:reverse}"></span>
+                </td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-issue-view ng-repeat="issue in issues | orderBy:predicate:reverse"></tr>
+        </tbody>
+    </table>
+</div>
