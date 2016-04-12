@@ -37,5 +37,9 @@ app.controller('IssuesController',
        $scope.addProject = function() {
            $location.path('/projects/add');
        }
+
+       $scope.viewAllProjects = function () {
+           $location.path("/projects");
+       }
    }
 );

@@ -26,6 +26,7 @@
         </tbody>
     </table>
     <div ng-if="authService.isAdmin()">
+        <button class="btn btn-lg btn-success" ng-click="viewAllProjects()">View All Projects</button>
         <button class="btn btn-lg btn-success" ng-click="addProject()">Add New Project</button>
         <button class="btn btn-lg btn-success">Add New Issue</button>
     </div>

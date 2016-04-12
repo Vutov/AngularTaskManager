@@ -32,8 +32,8 @@
             <label for="description">Description</label>
             <textarea class="form-control" placeholder="Description" id="description" ng-disabled="{{isDisabled}}" ng-model="project.Description">{{project.Description}}</textarea>
         </div>
-        <button ng-if="isProjectLeader" type="submit" ng-click="addIssue()" class="btn btn-success">Add Issue</button>
+        <button ng-if="isProjectLeader || authService.isAdmin()" type="submit" ng-click="addIssue()" class="btn btn-success">Add Issue</button>
         <button ng-if="!isDisabled" type="submit" ng-click="saveProject(project)" class="btn btn-success">Save</button>
-        <button ng-if="isDisabled && isProjectLeader" type="submit" ng-click="editProject()" class="btn btn-success">Edit Project</button>
+        <button ng-if="isDisabled && (isProjectLeader || authService.isAdmin())" type="submit" ng-click="editProject()" class="btn btn-success">Edit Project</button>
     </form>
 </div>

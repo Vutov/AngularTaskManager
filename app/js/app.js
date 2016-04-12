@@ -55,6 +55,14 @@ app.config(function ($routeProvider) {
         }
     });
 
+    $routeProvider.when('/projects', {
+        templateUrl: 'templates/admin/projectsView.html',
+        controller: 'ViewAllProjectsController',
+        access: {
+            requiresAdmin: true,
+        }
+    });
+    
     $routeProvider.when('/admin', {
         templateUrl: 'templates/admin/home.html',
         controller: 'AdminController',
@@ -64,7 +72,10 @@ app.config(function ($routeProvider) {
     });
    
     $routeProvider.otherwise({
-        redirectTo: '/'
+        redirectTo: '/',
+        access: {
+            requiresAnonymous: true,
+        }
     });
 });
 
@@ -78,7 +89,7 @@ app.run(function ($rootScope, $location, authService) {
             $location.path('/');
         }
 
-        if (next.access.requiresAdmin && !authService.isAdmin) {
+        if (next.access.requiresAdmin && !authService.isAdmin()) {
             $location.path('/');
         }
     });

@@ -108,3 +108,30 @@ app.controller('AddProjectController',
        }
    }
 );
+
+app.controller('ViewAllProjectsController',
+   function ($scope, $routeParams, $location, projectService, notifyService, pageSize, _, authService) {
+       $scope.isDisabled = true;
+       $scope.projectView = "All Project";
+
+       projectService.getAllProjects(
+              function success(data) {
+                  $scope.projects = data;
+              },
+              function error(err) {
+                  notifyService.showError("Failed loading data...", err);
+              });
+
+       $scope.viewProject = function(id) {
+           $location.path("projects/" + id);
+       }
+       //$scope.addIssue = function () {
+       //    //$location.path("projects/" + id + "/add-issue");
+       //    throw Error("Implement!")
+       //}
+
+       //$scope.editProject = function () {
+       //    $location.path("projects/" + $routeParams.id + "/edit");
+       //}
+   }
+);

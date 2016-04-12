@@ -31,3 +31,15 @@ footer > div {
     text-align: center;
     color: gainsboro;
 }
+
+.inline {
+    display: inline;
+}
+
+.project-format {
+    padding: 10px;
+}
+
+.float-right {
+    float: right;
+}

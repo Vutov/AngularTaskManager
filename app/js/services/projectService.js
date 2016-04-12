@@ -28,6 +28,18 @@ app.factory('projectService',
                     success(data);
 
                 }).error(error);
+            },
+            getAllProjects: function(success, error) {
+                var request = {
+                    method: 'GET',
+                    url: baseServiceUrl + '/projects',
+                    headers: authService.getAuthHeaders()
+                };
+
+                $http(request).success(function (data) {
+                    success(data);
+
+                }).error(error);
             }
         }
     }

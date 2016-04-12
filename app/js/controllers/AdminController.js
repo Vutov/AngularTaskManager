@@ -7,6 +7,13 @@ app.controller('AdminController',
            'pageSize': pageSize
        };
 
+       $scope.viewProjects = function() {
+           $location.path('/projects');
+       }
+
+       $scope.addProject = function () {
+           $location.path('/projects/add');
+       }
        //$scope.predicate = 'date';
        //$scope.reverse = false;
        //$scope.order = function (predicate) {
