@@ -16,6 +16,19 @@ app.factory('projectService',
 
                 }).error(error);
             },
+            updateProjectById: function(id, data, success, error) {
+                var request = {
+                    method: 'PUT',
+                    url: baseServiceUrl + '/projects/' + id,
+                    data: data,
+                    headers: authService.getAuthHeaders()
+                };
+
+                $http(request).success(function (data) {
+                    success(data);
+
+                }).error(error);
+            }
         }
     }
 );

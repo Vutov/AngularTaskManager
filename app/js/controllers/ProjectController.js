@@ -71,7 +71,24 @@ app.controller('EditProjectController',
        }
 
        $scope.saveProject = function (projectData) {
-           // TODO call service
+           projectData.LeadId = projectData.Lead.Id;
+           projectData.StringLabels.split(", ").forEach(function(l) {
+               projectData.Labels.push({ Name: l });
+           }); 
+           
+           projectData.StringPriorities.split(", ").forEach(function(p) {
+               projectData.Priorities.push({ Name: p });
+           });
+
+           projectService.updateProjectById(
+               $routeParams.id,
+               projectData,
+               function success() {
+                   $location.path("projects/" + $routeParams.id);
+               }, 
+               function error(err) {
+                   notifyService.showError("Failed loading data...", err);
+               });
        }
    }
 );

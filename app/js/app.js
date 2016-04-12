@@ -9,34 +9,59 @@ app.constant('_', window._);
 app.config(function ($routeProvider) {
     $routeProvider.when('/', {
         templateUrl: 'templates/dashboard.html',
-        controller: 'IssuesController'
+        controller: 'IssuesController',
+        access: {
+            requiresLogin: true,
+        }
     });
 
     $routeProvider.when('/login', {
         templateUrl: 'templates/login.html',
-        controller: 'LoginController'
+        controller: 'LoginController',
+        access: {
+            requiresAnonymous: true,
+        }
     });
 
     $routeProvider.when('/register', {
         templateUrl: 'templates/register.html',
-        controller: 'RegisterController'
+        controller: 'RegisterController',
+        access: {
+            requiresAnonymous: true,
+        }
     });
 
     $routeProvider.when('/projects/add', {
         templateUrl: 'templates/project.html',
-        controller: 'AddProjectController'
+        controller: 'AddProjectController',
+        access: {
+            requiresLogin: true,
+        }
     });
 
     $routeProvider.when('/projects/:id', {
         templateUrl: 'templates/project.html',
-        controller: 'ViewProjectController'
+        controller: 'ViewProjectController',
+        access: {
+            requiresLogin: true,
+        }
     });
 
     $routeProvider.when('/projects/:id/edit', {
         templateUrl: 'templates/project.html',
-        controller: 'EditProjectController'
+        controller: 'EditProjectController',
+        access: {
+            requiresLogin: true,
+        }
     });
 
+    $routeProvider.when('/admin', {
+        templateUrl: 'templates/admin/home.html',
+        controller: 'AdminController',
+        access: {
+            requiresAdmin: true,
+        }
+    });
    
     $routeProvider.otherwise({
         redirectTo: '/'
@@ -44,16 +69,16 @@ app.config(function ($routeProvider) {
 });
 
 app.run(function ($rootScope, $location, authService) {
-    $rootScope.$on('$locationChangeStart', function (event) {
-        var allowedGuestURI = ['/login', '/register'];
-        var currentURI = $location.path().toLowerCase();
-        if (!authService.isLoggedIn() &&
-            allowedGuestURI.indexOf(currentURI) === -1) {
+    $rootScope.$on('$routeChangeStart', function (event, next) {
+        if (next.access.requiresAnonymous && authService.isLoggedIn()) {
             $location.path('/');
         }
 
-        if (authService.isLoggedIn() &&
-            allowedGuestURI.indexOf(currentURI) !== -1) {
+        if (next.access.requiresLogin && !authService.isLoggedIn()) {
+            $location.path('/');
+        }
+
+        if (next.access.requiresAdmin && !authService.isAdmin) {
             $location.path('/');
         }
     });
