@@ -86,8 +86,10 @@ app.controller('EditProjectController',
            throw Error("Implement!")
        }
 
+       // TODO Extract its the same!
        $scope.saveProject = function (projectData) {
            projectData.LeadId = projectData.Lead.Id;
+           // TODO null check
            projectData.StringLabels.split(", ").forEach(function(l) {
                projectData.Labels.push({ Name: l });
            }); 
@@ -110,17 +112,46 @@ app.controller('EditProjectController',
 );
 
 app.controller('AddProjectController',
-   function ($scope, $routeParams, $route, $location, notifyService, pageSize) {
+   function ($scope, $routeParams, $route, $location, notifyService, pageSize, userService) {
        $scope.isDisabled = false;
        $scope.projectView = "Add Project";
+
+       $scope.project = {};
 
        $scope.addIssue = function () {
            //$location.path("projects/" + id + "/add-issue");
            throw Error("Implement!")
        }
 
+       userService.getAllUsers(function success(data) {
+           $scope.leaders = data.sort(function(a, b) {
+               return a.Username.localeCompare(b.Username);
+           });
+       }, function error(err) {
+           notifyService.showError("Failed loading data...", err);
+       });
+
+       // TODO Extract its the same!
        $scope.saveProject = function (projectData) {
-           // TODO call service
+           projectData.LeadId = projectData.Lead.Id;
+           // TODO null check
+           projectData.StringLabels.split(", ").forEach(function(l) {
+               projectData.Labels.push({ Name: l });
+           }); 
+           
+           projectData.StringPriorities.split(", ").forEach(function(p) {
+               projectData.Priorities.push({ Name: p });
+           });
+
+           projectService.updateProjectById(
+               $routeParams.id,
+               projectData,
+               function success() {
+                   $location.path("projects/" + $routeParams.id);
+               }, 
+               function error(err) {
+                   notifyService.showError("Failed loading data...", err);
+               });
        }
    }
 );
@@ -141,13 +172,5 @@ app.controller('ViewAllProjectsController',
        $scope.viewProject = function(id) {
            $location.path("projects/" + id);
        }
-       //$scope.addIssue = function () {
-       //    //$location.path("projects/" + id + "/add-issue");
-       //    throw Error("Implement!")
-       //}
-
-       //$scope.editProject = function () {
-       //    $location.path("projects/" + $routeParams.id + "/edit");
-       //}
    }
 );

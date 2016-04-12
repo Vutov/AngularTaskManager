@@ -1,40 +1,18 @@
 ﻿<h2 class="projectView">{{projectView}}</h2>
-<div ng-cloak>
-    <form name="projectForm">
-        <div class="form-group">
-            <label for="name">Name</label>
-            <input type="text" class="form-control" id="name" placeholder="Project Name" ng-disabled="{{isDisabled}}" ng-model="project.Name">
-        </div>
-        <div class="form-group">
-            <label for="leader">Leader</label>
-            <select class="form-control" id="leader" ng-disabled="{{isDisabled}}" ng-model="project.Lead.Id">
-                <option ng-if="!isDisabled" ng-repeat="leader in leaders" ng-selected="{{leader.Username == project.Lead.Username}}"
-                        value="{{leader.Id}}">
-                    {{leader.Username}}
-                </option>
-                <option ng-if="isDisabled" selected="selected">{{project.Lead.Username}}</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="key">Project Key</label>
-            <input type="text" class="form-control" id="key" placeholder="Project Key" ng-disabled="{{isDisabled}}" ng-model="project.ProjectKey">
-        </div>
-        <div class="form-group">
-            <label for="priorities">Priorities (comma separated)</label>
-            <input type="text" class="form-control" id="priorities" placeholder="Available Priorities For The Issues" ng-disabled="{{isDisabled}}" ng-model="project.StringPriorities">
-        </div>
-        <div class="form-group">
-            <label for="labels">Labels (comma separated)</label>
-            <input type="text" class="form-control" id="labels" placeholder="Labels" ng-disabled="{{isDisabled}}" ng-model="project.StringLabels">
-            <br>
-        </div>
-        <div class="form-group">
-            <label for="description">Description</label>
-            <textarea class="form-control" placeholder="Description" id="description" ng-disabled="{{isDisabled}}" ng-model="project.Description">{{project.Description}}</textarea>
-        </div>
+
+<div ng-if="!isDisabled">
+    <form name="form" ng-app="app" ng-submit="saveProject(project)">
+        <div ng-project-form></div>
         <button ng-if="isProjectLeader || authService.isAdmin()" type="submit" ng-click="addIssue()" class="btn btn-success">Add Issue</button>
-        <button ng-if="!isDisabled" type="submit" ng-click="saveProject(project)" class="btn btn-success">Save</button>
-        <button ng-if="isDisabled && (isProjectLeader || authService.isAdmin())" type="submit" ng-click="editProject()" class="btn btn-success">Edit Project</button>
+        <button type="submit" ng-click="submitted=true" class="btn btn-primary btn-large">Save</button>
+    </form>
+</div>
+
+<div ng-if="isDisabled">
+    <form name="form" ng-app="app">
+        <div ng-project-form></div>
+        <button ng-if="isProjectLeader || authService.isAdmin()" type="submit" ng-click="addIssue()" class="btn btn-success">Add Issue</button>
+        <button ng-if="isProjectLeader || authService.isAdmin()" type="submit" ng-click="editProject()" class="btn btn-success">Edit Project</button>
     </form>
 </div>
 
@@ -42,24 +20,7 @@
     <h1>Issues</h1>
     <table class="table table-striped" ng-if="issues.length > 0">
         <thead>
-            <tr>
-                <td class="hoverable" ng-click="order('title')">
-                    Title
-                    <span class="sortorder" ng-show="predicate === 'title'" ng-class="{reverse:reverse}"></span>
-                </td>
-                <td class="hoverable" ng-click="order('description')">
-                    Description
-                    <span class="sortorder" ng-show="predicate === 'description'" ng-class="{reverse:reverse}"></span>
-                </td>
-                <td class="hoverable" ng-click="order('date')">
-                    Due Date
-                    <span class="sortorder" ng-show="predicate === 'date'" ng-class="{reverse:reverse}"></span>
-                </td>
-                <td class="hoverable" ng-click="order('assignee')">
-                    Assignee
-                    <span class="sortorder" ng-show="predicate === 'assignee'" ng-class="{reverse:reverse}"></span>
-                </td>
-            </tr>
+            <tr ng-issue-header-view></tr>
         </thead>
         <tbody>
             <tr ng-issue-view ng-repeat="issue in issues | orderBy:predicate:reverse"></tr>

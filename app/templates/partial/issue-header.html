@@ -1,0 +1,18 @@
+﻿<tr>
+    <td class="hoverable" ng-click="order('title')">
+        Title
+        <span class="sortorder" ng-show="predicate === 'title'" ng-class="{reverse:reverse}"></span>
+    </td>
+    <td class="hoverable" ng-click="order('description')">
+        Description
+        <span class="sortorder" ng-show="predicate === 'description'" ng-class="{reverse:reverse}"></span>
+    </td>
+    <td class="hoverable" ng-click="order('date')">
+        Due Date
+        <span class="sortorder" ng-show="predicate === 'date'" ng-class="{reverse:reverse}"></span>
+    </td>
+    <td class="hoverable" ng-click="order('assignee')">
+        Assignee
+        <span class="sortorder" ng-show="predicate === 'assignee'" ng-class="{reverse:reverse}"></span>
+    </td>
+</tr>

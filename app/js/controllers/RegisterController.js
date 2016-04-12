@@ -4,7 +4,6 @@ app.controller('RegisterController',
     function ($scope, $location, authService, notifyService) {
 
         $scope.userData = {};
-        $scope.genders = [{ id: 0, name: "Other" }, { id: 1, name: "Male" }, { id: 2, name: "Female" }];
 
         $scope.register = function(userData) {
             authService.register(userData,

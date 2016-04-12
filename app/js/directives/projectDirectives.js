@@ -7,10 +7,23 @@ app.directive("ngProjectView", [function () {
     };
 }]);
 
+app.directive("ngProjectForm", [function () {
+    return {
+        restrict: 'A',
+        templateUrl: 'templates/partial/project-form.html'
+    };
+}]);
 
 app.directive("ngIssueView", [function () {
     return {
         restrict: 'A',
         templateUrl: 'templates/partial/issue.html'
+    };
+}]);
+
+app.directive("ngIssueHeaderView", [function () {
+    return {
+        restrict: 'A',
+        templateUrl: 'templates/partial/issue-header.html'
     };
 }]);
