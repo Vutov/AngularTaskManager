@@ -97,7 +97,20 @@ app.factory('authService',
                 return (currentUser != undefined) && (currentUser.isAdmin);
             },
 
-            getAuthHeaders: getAuthHeaders
+            getAuthHeaders: getAuthHeaders,
+
+            changePassword: function(userData, success, error) {
+                var request = {
+                    method: 'POST',
+                    url: baseServiceUrl + 'api/Account/ChangePassword',
+                    data: userData,
+                    headers: getAuthHeaders()
+                };
+
+                $http(request).success(function (data) {
+                    success(data);
+                }).error(error);
+            }
         }
     }
 );

@@ -15,5 +15,18 @@ app.controller('AppController',
                 }
             );
         };
+
+        $scope.changePassword = function(userData) {
+            authService.changePassword(
+                userData,
+                function success() {
+                    notifyService.showInfo("Password changed successfully");
+                    $location.path("/");
+                },
+                function error(err) {
+                    notifyService.showError("Password changeing failed", err);
+                }
+            );
+        }
     }
 );

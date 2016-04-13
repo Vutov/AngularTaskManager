@@ -70,6 +70,14 @@ app.config(function ($routeProvider) {
             requiresAdmin: true,
         }
     });
+
+    $routeProvider.when('/profile/password', {
+        templateUrl: 'templates/change-password.html',
+        controller: 'AppController',
+        access: {
+            requiresLogin: true,
+        }
+    });
    
     $routeProvider.otherwise({
         redirectTo: '/',
