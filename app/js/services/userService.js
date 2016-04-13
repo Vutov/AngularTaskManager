@@ -16,6 +16,19 @@ app.factory('userService',
 
                 }).error(error);
             },
+            makeAdmin: function(data, success, error) {
+                var request = {
+                    method: 'PUT',
+                    url: baseServiceUrl + 'users/makeadmin',
+                    data: data,
+                    headers: authService.getAuthHeaders()
+                };
+
+                $http(request).success(function (data) {
+                    success(data);
+
+                }).error(error);
+            }
 
         }
     }

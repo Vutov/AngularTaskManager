@@ -20,7 +20,7 @@ app.factory('authService',
 
                 var userInfoRequest = {
                     method: 'GET',
-                    url: baseServiceUrl + '/users/me',
+                    url: baseServiceUrl + 'users/me',
                     headers: { Authorization: 'Bearer ' + userData.access_token }
                 };
 

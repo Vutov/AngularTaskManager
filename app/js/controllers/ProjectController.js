@@ -5,6 +5,7 @@ app.controller('ViewProjectController',
        $scope.isDisabled = true;
        $scope.projectView = "Project";
 
+       // TODO extract same
        projectService.getProjectById(
               $routeParams.id,
               function success(data) {
@@ -23,7 +24,7 @@ app.controller('ViewProjectController',
                   notifyService.showError("Failed loading data...", err);
               });
 
-       $scope.predicate = 'date';
+       $scope.predicate = 'DueDate';
        $scope.reverse = true;
        $scope.order = function (predicate) {
            $scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
@@ -55,6 +56,7 @@ app.controller('EditProjectController',
        $scope.isDisabled = false;
        $scope.projectView = "Edit Project";
 
+       // TODO extract same
        projectService.getProjectById(
               $routeParams.id,
               function success(data) {
@@ -89,10 +91,12 @@ app.controller('EditProjectController',
        // TODO Extract its the same!
        $scope.saveProject = function (projectData) {
            projectData.LeadId = projectData.Lead.Id;
-           // TODO null check
-           projectData.StringLabels.split(", ").forEach(function(l) {
-               projectData.Labels.push({ Name: l });
-           }); 
+
+           if (projectData.StringLabels) {
+               projectData.StringLabels.split(", ").forEach(function(l) {
+                   projectData.Labels.push({ Name: l });
+               }); 
+           }
            
            projectData.StringPriorities.split(", ").forEach(function(p) {
                projectData.Priorities.push({ Name: p });
@@ -101,7 +105,7 @@ app.controller('EditProjectController',
            projectService.updateProjectById(
                $routeParams.id,
                projectData,
-               function success() {
+               function success(data) {
                    $location.path("projects/" + $routeParams.id);
                }, 
                function error(err) {
@@ -112,7 +116,7 @@ app.controller('EditProjectController',
 );
 
 app.controller('AddProjectController',
-   function ($scope, $routeParams, $route, $location, notifyService, pageSize, userService) {
+   function ($scope, $routeParams, $route, $location, projectService, notifyService, pageSize, userService) {
        $scope.isDisabled = false;
        $scope.projectView = "Add Project";
 
@@ -131,23 +135,25 @@ app.controller('AddProjectController',
            notifyService.showError("Failed loading data...", err);
        });
 
-       // TODO Extract its the same!
        $scope.saveProject = function (projectData) {
            projectData.LeadId = projectData.Lead.Id;
-           // TODO null check
-           projectData.StringLabels.split(", ").forEach(function(l) {
-               projectData.Labels.push({ Name: l });
-           }); 
+           projectData.Labels = [];
+           projectData.Priorities = [];
+
+           if (projectData.StringLabels) {
+               projectData.StringLabels.split(", ").forEach(function(l) {
+                   projectData.Labels.push({ Name: l });
+               }); 
+           }
            
            projectData.StringPriorities.split(", ").forEach(function(p) {
                projectData.Priorities.push({ Name: p });
            });
 
-           projectService.updateProjectById(
-               $routeParams.id,
+           projectService.addNewProject(
                projectData,
-               function success() {
-                   $location.path("projects/" + $routeParams.id);
+               function success(data) {
+                   $location.path("projects/" + data.Id);
                }, 
                function error(err) {
                    notifyService.showError("Failed loading data...", err);

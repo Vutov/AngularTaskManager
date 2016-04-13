@@ -27,3 +27,10 @@ app.directive("ngIssueHeaderView", [function () {
         templateUrl: 'templates/partial/issue-header.html'
     };
 }]);
+
+app.directive("ngUserView", [function () {
+    return {
+        restrict: 'A',
+        templateUrl: 'templates/partial/user.html'
+    };
+}]);

@@ -7,7 +7,7 @@ app.factory('projectService',
             getProjectById: function (id, success, error) {
                 var request = {
                     method: 'GET',
-                    url: baseServiceUrl + '/projects/' + id,
+                    url: baseServiceUrl + 'projects/' + id,
                     headers: authService.getAuthHeaders()
                 };
 
@@ -19,7 +19,7 @@ app.factory('projectService',
             updateProjectById: function(id, data, success, error) {
                 var request = {
                     method: 'PUT',
-                    url: baseServiceUrl + '/projects/' + id,
+                    url: baseServiceUrl + 'projects/' + id,
                     data: data,
                     headers: authService.getAuthHeaders()
                 };
@@ -32,7 +32,7 @@ app.factory('projectService',
             getAllProjects: function(success, error) {
                 var request = {
                     method: 'GET',
-                    url: baseServiceUrl + '/projects',
+                    url: baseServiceUrl + 'projects',
                     headers: authService.getAuthHeaders()
                 };
 
@@ -44,7 +44,7 @@ app.factory('projectService',
             getIssuesForProjectById: function(id, success, error) {
                 var request = {
                     method: 'GET',
-                    url: baseServiceUrl + '/projects/'+ id +'/issues',
+                    url: baseServiceUrl + 'projects/'+ id +'/issues',
                     headers: authService.getAuthHeaders()
                 };
 
@@ -53,6 +53,19 @@ app.factory('projectService',
 
                 }).error(error);
             },
+            addNewProject: function(projetData, success, error) {
+                var request = {
+                    method: 'POST',
+                    url: baseServiceUrl + 'projects',
+                    data: projetData,
+                    headers: authService.getAuthHeaders()
+                };
+
+                $http(request).success(function (data) {
+                    success(data);
+
+                }).error(error);
+            }
         }
     }
 );

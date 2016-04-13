@@ -18,7 +18,6 @@
                 <li ng-if="authService.isLoggedIn()">
                     <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{authService.getCurrentUser().userName}}<span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="#/profile">User Profile</a></li>
                         <li ng-if="authService.isAdmin()"><a href="#/admin">Admin</a></li>
                         <li><a href="#/profile" ng-click="logout()">Logout</a></li>
                     </ul>

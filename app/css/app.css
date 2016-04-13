@@ -22,6 +22,11 @@ footer > div {
     cursor: pointer;
 }
 
+.hoverable:hover {
+    color: #40e0d0;
+    text-decoration: underline;
+}
+
 .dashboard {
     height: 100%;
 }
@@ -36,10 +41,14 @@ footer > div {
     display: inline;
 }
 
-.project-format {
+.padding-10 {
     padding: 10px;
 }
 
-.float-right {
-    float: right;
+.margin-top {
+    margin-top: 20px;
+}
+
+.margin-20 {
+    margin: 20px;
 }

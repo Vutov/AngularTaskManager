@@ -1,18 +1,18 @@
 ﻿<tr>
-    <td class="hoverable" ng-click="order('title')">
+    <td class="hoverable" ng-click="order('Title')">
         Title
-        <span class="sortorder" ng-show="predicate === 'title'" ng-class="{reverse:reverse}"></span>
+        <span class="sortorder" ng-show="predicate === 'Title'" ng-class="{reverse:reverse}"></span>
     </td>
-    <td class="hoverable" ng-click="order('description')">
+    <td class="hoverable" ng-click="order('Description')">
         Description
-        <span class="sortorder" ng-show="predicate === 'description'" ng-class="{reverse:reverse}"></span>
+        <span class="sortorder" ng-show="predicate === 'Description'" ng-class="{reverse:reverse}"></span>
     </td>
-    <td class="hoverable" ng-click="order('date')">
+    <td class="hoverable" ng-click="order('DueDate')">
         Due Date
-        <span class="sortorder" ng-show="predicate === 'date'" ng-class="{reverse:reverse}"></span>
+        <span class="sortorder" ng-show="predicate === 'DueDate'" ng-class="{reverse:reverse}"></span>
     </td>
-    <td class="hoverable" ng-click="order('assignee')">
+    <td class="hoverable" ng-click="order('Author.Username')">
         Assignee
-        <span class="sortorder" ng-show="predicate === 'assignee'" ng-class="{reverse:reverse}"></span>
+        <span class="sortorder" ng-show="predicate === 'Author.Username'" ng-class="{reverse:reverse}"></span>
     </td>
 </tr>

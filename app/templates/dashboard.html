@@ -3,17 +3,17 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <td class="hoverable" ng-click="order('issue')">
+                <td class="hoverable" ng-click="order('Title')">
                     Issue
-                    <span class="sortorder" ng-show="predicate === 'issue'" ng-class="{reverse:reverse}"></span>
+                    <span class="sortorder" ng-show="predicate === 'Title'" ng-class="{reverse:reverse}"></span>
                 </td>
-                <td class="hoverable" ng-click="order('project')">
+                <td class="hoverable" ng-click="order('Project.Name')">
                     Project
-                    <span class="sortorder" ng-show="predicate === 'project'" ng-class="{reverse:reverse}"></span>
+                    <span class="sortorder" ng-show="predicate === 'Project.Name'" ng-class="{reverse:reverse}"></span>
                 </td>
-                <td class="hoverable" ng-click="order('date')">
+                <td class="hoverable" ng-click="order('DueDate')">
                     Due Date
-                    <span class="sortorder" ng-show="predicate === 'date'" ng-class="{reverse:reverse}"></span>
+                    <span class="sortorder" ng-show="predicate === 'DueDate'" ng-class="{reverse:reverse}"></span>
                 </td>
             </tr>
         </thead>
