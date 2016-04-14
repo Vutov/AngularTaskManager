@@ -43,3 +43,13 @@ app.controller('IssuesController',
        }
    }
 );
+
+app.controller('AddIssuesController',
+   function ($scope, $location, authService, issueService, notifyService, pageSize) {
+       $scope.issueView = "Add Issue";
+
+        $scope.saveIssue = function(issueData) {
+            
+        }
+   }
+);

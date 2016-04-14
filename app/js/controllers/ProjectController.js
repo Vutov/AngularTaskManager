@@ -40,9 +40,9 @@ app.controller('ViewProjectController',
                   notifyService.showError("Failed loading data...", err);
               });
 
+       // TODO same
        $scope.addIssue = function () {
-           //$location.path("projects/" + id + "/add-issue");
-           throw Error("Implement!")
+           $location.path("projects/" + $routeParams.id + "/add-issue");
        }
 
        $scope.editProject = function () {
@@ -83,23 +83,25 @@ app.controller('EditProjectController',
                   notifyService.showError("Failed loading data...", err);
               });
 
+       // TODO Same
        $scope.addIssue = function () {
-           //$location.path("projects/" + id + "/add-issue");
-           throw Error("Implement!")
+           $location.path("projects/" + $routeParams.id + "/add-issue");
        }
 
-       // TODO Extract its the same!
        $scope.saveProject = function (projectData) {
+           // TODO Same
            projectData.LeadId = projectData.Lead.Id;
+           projectData.Labels = [];
+           projectData.Priorities = [];
 
            if (projectData.StringLabels) {
-               projectData.StringLabels.split(", ").forEach(function(l) {
-                   projectData.Labels.push({ Name: l });
+               projectData.StringLabels.split(",").forEach(function(l) {
+                   projectData.Labels.push({ Name: l.trim() });
                }); 
            }
            
-           projectData.StringPriorities.split(", ").forEach(function(p) {
-               projectData.Priorities.push({ Name: p });
+           projectData.StringPriorities.split(",").forEach(function(p) {
+               projectData.Priorities.push({ Name: p.trim() });
            });
 
            projectService.updateProjectById(
@@ -122,9 +124,9 @@ app.controller('AddProjectController',
 
        $scope.project = {};
 
+       // TODO same
        $scope.addIssue = function () {
-           //$location.path("projects/" + id + "/add-issue");
-           throw Error("Implement!")
+           $location.path("projects/" + $routeParams.id + "/add-issue");
        }
 
        userService.getAllUsers(function success(data) {
@@ -136,18 +138,19 @@ app.controller('AddProjectController',
        });
 
        $scope.saveProject = function (projectData) {
+           // TODO Same
            projectData.LeadId = projectData.Lead.Id;
            projectData.Labels = [];
            projectData.Priorities = [];
 
            if (projectData.StringLabels) {
-               projectData.StringLabels.split(", ").forEach(function(l) {
-                   projectData.Labels.push({ Name: l });
+               projectData.StringLabels.split(",").forEach(function(l) {
+                   projectData.Labels.push({ Name: l.trim() });
                }); 
            }
            
-           projectData.StringPriorities.split(", ").forEach(function(p) {
-               projectData.Priorities.push({ Name: p });
+           projectData.StringPriorities.split(",").forEach(function(p) {
+               projectData.Priorities.push({ Name: p.trim() });
            });
 
            projectService.addNewProject(
@@ -163,7 +166,7 @@ app.controller('AddProjectController',
 );
 
 app.controller('ViewAllProjectsController',
-   function ($scope, $routeParams, $location, projectService, notifyService, pageSize, _, authService) {
+   function ($scope, $routeParams, $location, projectService, notifyService) {
        $scope.isDisabled = true;
        $scope.projectView = "All Project";
 

@@ -78,7 +78,15 @@ app.config(function ($routeProvider) {
             requiresLogin: true,
         }
     });
-   
+
+    $routeProvider.when('/projects/:id/add-issue', {
+        templateUrl: 'templates/issue.html',
+        controller: 'AddIssuesController',
+        access: {
+            requiresLogin: true,
+        }
+    });
+
     $routeProvider.otherwise({
         redirectTo: '/',
         access: {

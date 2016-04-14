@@ -17,7 +17,7 @@ app.directive("ngProjectForm", [function () {
 app.directive("ngIssueView", [function () {
     return {
         restrict: 'A',
-        templateUrl: 'templates/partial/issue.html'
+        templateUrl: 'templates/partial/issue-view.html'
     };
 }]);
 
@@ -32,5 +32,12 @@ app.directive("ngUserView", [function () {
     return {
         restrict: 'A',
         templateUrl: 'templates/partial/user.html'
+    };
+}]);
+
+app.directive("ngIssueForm", [function () {
+    return {
+        restrict: 'A',
+        templateUrl: 'templates/partial/issue-form.html'
     };
 }]);
