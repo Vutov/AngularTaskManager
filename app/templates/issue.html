@@ -1,6 +1,37 @@
 ﻿<h2 class="projectView">{{issueView}}</h2>
 
-<form name="form" ng-app="app" ng-submit="saveIssue(userData)">
+<form name="form" ng-app="app" ng-submit="saveIssue(issueData)">
     <div ng-issue-form></div>
     <button type="submit" class="btn btn-primary btn-large" ng-click="submitted=true">Save</button>
 </form>
+
+<h3>Status transition scheme</h3>
+<ul id="statuses">
+    <li><strong>Open</strong></li>
+    <li>
+        In Progress <button class="btn btn-sm btn-info">transition to status</button>
+        <ul>
+            <li>
+                Closed
+            </li>
+        </ul>
+    </li>
+    <li>
+        Resolved <button class="btn btn-sm btn-info">transition to status</button>
+        <ul>
+            <li>
+                Closed
+            </li>
+        </ul>
+        <ul>
+            <li>
+                Reopened
+                <ul>
+                    <li>
+                        Closed
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+</ul>

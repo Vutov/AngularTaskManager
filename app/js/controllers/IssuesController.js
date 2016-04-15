@@ -34,7 +34,7 @@ app.controller('IssuesController',
 
        $scope.getIssues();
 
-       $scope.addProject = function() {
+       $scope.addProject = function () {
            $location.path('/projects/add');
        }
 
@@ -45,11 +45,46 @@ app.controller('IssuesController',
 );
 
 app.controller('AddIssuesController',
-   function ($scope, $location, authService, issueService, notifyService, pageSize) {
+   function ($scope, $location, authService, issueService, userService, projectService, lableService, notifyService, pageSize, _) {
        $scope.issueView = "Add Issue";
 
-        $scope.saveIssue = function(issueData) {
-            
-        }
+       userService.getAllUsers(function success(data) {
+           $scope.users = data;
+       }, function error(err) {
+           notifyService.showError("Failed loading data...", err);
+       });
+
+       projectService.getAllProjects(function success(data) {
+           $scope.projects = data;
+       }, function error(err) {
+           notifyService.showError("Failed loading data...", err);
+       });
+
+       $scope.updatePriorities = function() {
+           $scope.priorities = _($scope.projects).find(p => p.Id == $scope.issueData.ProjectId).Priorities;
+       }
+
+       $scope.getLabels = function() {
+           var filter = $scope.issueData.StringLabels;
+           var allFilters = filter.split(',');
+           var lastFilter = allFilters[allFilters.length - 1].trim();
+
+           if (lastFilter.length >= 2) {
+               lableService.getLablesFor(
+                   lastFilter,
+                   function success(data) {
+                       $scope.labels = data;
+                   }, function error(err) {
+                       notifyService.showError("Failed loading data...", err);
+                   }
+               );
+           } else {
+               $scope.labels = [];
+           }
+       }; 
+
+       $scope.saveIssue = function (issueData) {
+
+       }
    }
 );
