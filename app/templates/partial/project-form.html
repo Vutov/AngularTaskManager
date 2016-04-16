@@ -1,7 +1,7 @@
 ﻿<div class="form-group" ng-class="{true: 'has-error'}[submitted && form.name.$invalid]">
     <label class="control-label" for="name">Name</label>
     <div class="controls">
-        <input type="text" class="form-control" id="name" name="name" placeholder="Project Name" ng-disabled="{{isDisabled}}" ng-model="project.Name" required />
+        <input type="text" class="form-control" id="name" name="name" placeholder="Project Name" ng-disabled="{{isDisabled}}" ng-model="project.Name" autocomplete="off" autocomplete="off" required />
         <span class="help-block" ng-show="submitted && form.name.$error.required">Required</span>
     </div>
 </div>
@@ -23,7 +23,7 @@
 <div class="form-group" ng-class="{true: 'has-error'}[submitted && form.key.$invalid]">
     <label class="control-label" for="key">Project Key</label>
     <div class="controls">
-        <input type="text" class="form-control" id="key" name="key" placeholder="Project Key" ng-disabled="{{isDisabled}}" ng-model="project.ProjectKey" required>
+        <input type="text" class="form-control" id="key" name="key" placeholder="Project Key" ng-disabled="{{isDisabled}}" ng-model="project.ProjectKey" autocomplete="off" autocomplete="off" required>
         <span class="help-block" ng-show="submitted && form.key.$error.required">Required</span>
     </div>
 </div>
@@ -31,14 +31,17 @@
 <div class="form-group" ng-class="{true: 'has-error'}[submitted && form.priorities.$invalid]">
     <label for="priorities">Priorities (comma separated)</label>
     <div class="controls">
-        <input type="text" class="form-control" id="priorities" name="priorities" placeholder="Available Priorities For The Issues" ng-disabled="{{isDisabled}}" ng-model="project.StringPriorities" required>
+        <input type="text" class="form-control" id="priorities" name="priorities" placeholder="Available Priorities For The Issues" ng-disabled="{{isDisabled}}" ng-model="project.StringPriorities" autocomplete="off" autocomplete="off" required>
         <span class="help-block" ng-show="submitted && form.priorities.$error.required">Required</span>
     </div>
 </div>
 
 <div class="form-group">
     <label for="labels">Labels (comma separated)</label>
-    <input type="text" class="form-control" id="labels" placeholder="Labels" ng-disabled="{{isDisabled}}" ng-model="project.StringLabels">
+    <input type="text" class="form-control" id="labels" placeholder="Labels" ng-disabled="{{isDisabled}}" ng-model="project.StringLabels" ng-keyup="getLabels()" autocomplete="off">
+    <div ng-if="labels.length > 0" class="label-holder">
+        <div ng-repeat="label in labels" ng-click="addLabel(label)" class="label-option">{{label.Name}}</div>
+    </div>
     <br>
 </div>
 

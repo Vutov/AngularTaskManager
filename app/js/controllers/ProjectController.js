@@ -21,7 +21,6 @@ app.controller('ViewProjectController',
                   notifyService.showError("Failed loading data...", err);
               });
 
-       // TODO Directive
        $scope.predicate = 'DueDate';
        $scope.reverse = true;
        $scope.order = function (predicate) {
@@ -45,7 +44,7 @@ app.controller('ViewProjectController',
 );
 
 app.controller('EditProjectController',
-   function ($scope, $routeParams, $location, projectService, notifyService, pageSize, _, authService, userService) {
+   function ($scope, $routeParams, $location, projectService, notifyService, pageSize, _, authService, userService, lableService) {
        $scope.isDisabled = false;
        $scope.projectView = "Edit Project";
 
@@ -106,11 +105,45 @@ app.controller('EditProjectController',
        $scope.addIssue = function() {
            $location.path('projects/'+ $routeParams.id +'/add-issue');
        }
+
+       $scope.getLabels = function() {
+           var filter = $scope.project.StringLabels;
+           if (filter) {
+               var allFilters = filter.split(',');
+               var lastFilter = allFilters[allFilters.length - 1].trim();
+
+               if (lastFilter.length >= 2) {
+                   lableService.getLablesFor(
+                       lastFilter,
+                       function success(data) {
+                           $scope.labels = data;
+                       }, function error(err) {
+                           notifyService.showError("Failed loading data...", err);
+                       }
+                   );
+               } else {
+                   $scope.labels = [];
+               }
+           }
+       };
+
+       $scope.addLabel = function(label) {
+           var lastComma = $scope.project.StringLabels.lastIndexOf(',');
+           if (lastComma !== -1) {
+               $scope.project.StringLabels = $scope.project.StringLabels.slice(0, lastComma) + ', ';
+           } else {
+               $scope.project.StringLabels = '';
+           }
+
+           $scope.project.StringLabels += label.Name + ', ';
+           $scope.labels = [];
+       }
+
    }
 );
 
 app.controller('AddProjectController',
-   function ($scope, $routeParams, $route, $location, projectService, notifyService, pageSize, userService) {
+   function ($scope, $routeParams, $route, $location, projectService, notifyService, pageSize, userService, lableService) {
        $scope.isDisabled = false;
        $scope.projectView = "Add Project";
        $scope.project = {};
@@ -154,6 +187,39 @@ app.controller('AddProjectController',
 
        $scope.addIssue = function() {
            $location.path('projects/add-issue');
+       }
+
+       $scope.getLabels = function() {
+           var filter = $scope.project.StringLabels;
+           if (filter) {
+               var allFilters = filter.split(',');
+               var lastFilter = allFilters[allFilters.length - 1].trim();
+
+               if (lastFilter.length >= 2) {
+                   lableService.getLablesFor(
+                       lastFilter,
+                       function success(data) {
+                           $scope.labels = data;
+                       }, function error(err) {
+                           notifyService.showError("Failed loading data...", err);
+                       }
+                   );
+               } else {
+                   $scope.labels = [];
+               }
+           }
+       };
+
+       $scope.addLabel = function(label) {
+           var lastComma = $scope.project.StringLabels.lastIndexOf(',');
+           if (lastComma !== -1) {
+               $scope.project.StringLabels = $scope.project.StringLabels.slice(0, lastComma) + ', ';
+           } else {
+               $scope.project.StringLabels = '';
+           }
+
+           $scope.project.StringLabels += label.Name + ', ';
+           $scope.labels = [];
        }
    }
 );

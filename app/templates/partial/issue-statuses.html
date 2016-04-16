@@ -1,0 +1,11 @@
+﻿<h4>
+    Current status:
+    <strong ng-if="issueData.Status.Id == 1">Closed</strong>
+    <strong ng-if="issueData.Status.Id == 2">Open</strong>
+    <strong ng-if="issueData.Status.Id == 3">In Progress</strong>
+    <strong ng-if="issueData.Status.Id == 4">Resolved</strong>
+</h4>
+
+<button ng-if="issueData.Status.Id == 2" class="btn btn-sm btn-info inline" ng-click="changeStatus(3)">In Progress</button>
+<button ng-if="issueData.Status.Id == 3" class="btn btn-sm btn-info inline" ng-click="changeStatus(4)">Resolve</button>
+<button ng-if="issueData.Status.Id != 1" class="btn btn-sm btn-info inline" ng-click="changeStatus(1)">Close</button>

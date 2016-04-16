@@ -95,6 +95,22 @@ app.config(function ($routeProvider) {
         }
     });
 
+    $routeProvider.when('/issues/:id', {
+        templateUrl: 'templates/issue.html',
+        controller: 'ViewIssueController',
+        access: {
+            requiresLogin: true,
+        }
+    });
+
+    $routeProvider.when('/issues/:id/edit', {
+        templateUrl: 'templates/issue.html',
+        controller: 'EditIssueController',
+        access: {
+            requiresLogin: true,
+        }
+    });
+
     $routeProvider.otherwise({
         redirectTo: '/',
         access: {

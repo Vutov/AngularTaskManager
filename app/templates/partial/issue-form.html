@@ -1,8 +1,17 @@
 ﻿<div class="form-group" ng-class="{true: 'has-error'}[submitted && form.assignee.$invalid]">
     <label for="assignee">Assignee</label>
     <div class="controls">
-        <select class="form-control" id="assignee" name="assignee" ng-model="issueData.AssigneeId" required>
-            <option ng-repeat="user in users | orderBy: 'Username'" value="{{user.Id}}">
+        <select ng-if="!isEdit" class="form-control" id="assignee" name="assignee" ng-model="issueData.AssigneeId" ng-disabled="{{isDisabled}}" required>
+            <option ng-if="isView" selected="selected">
+                {{issueData.Assignee.Username}}
+            </option>
+            <option ng-if="!isView" ng-repeat="user in users | orderBy: 'Username'" value="{{user.Id}}">
+                {{user.Username}}
+            </option>
+        </select>
+
+        <select ng-if="isEdit" class="form-control" id="assignee" name="assignee" ng-model="issueData.Assignee.Id" ng-disabled="{{isDisabled}}" required>
+            <option ng-repeat="user in users | orderBy: 'Username'" value="{{user.Id}}" ng-selected="IssueData.Assignee.Id == user.Id">
                 {{user.Username}}
             </option>
         </select>
@@ -13,12 +22,18 @@
 <div class="form-group" ng-class="{true: 'has-error'}[submitted && form.project.$invalid]">
     <label for="project">Project</label>
     <div class="controls">
-        <select class="form-control" id="project" name="project" ng-model="currentProject" ng-change="updatePriorities()" ng-disabled="setProject" required>
-            <option ng-if="!setProject" ng-repeat="project in projects | orderBy: 'Name'" value="{{project.Id}}">
+
+        <select ng-if="!setProject && !isView && !isEdit" class="form-control" id="project" name="project" ng-model="issueData.ProjectId" ng-change="updatePriorities()" ng-disabled="setProject || isDisabled" required>
+            <option ng-repeat="project in projects | orderBy: 'Name'" value="{{project.Id}}">
                 {{project.Name}}
             </option>
-            <option ng-if="setProject" value="{{currentProject.Id}}" selected="selected">{{currentProject.Name}}</option>
         </select>
+
+        <select ng-if="setProject || isView || isEdit" class="form-control" id="project" name="project" ng-model="currentProject" ng-change="updatePriorities()" ng-disabled="setProject || isDisabled" required>
+            <option ng-if="setProject" value="{{currentProject.Id}}" selected="selected">{{currentProject.Name}}</option>
+            <option ng-if="isView || isEdit" selected="selected">{{issueData.Project.Name}}</option>
+        </select>
+
         <span class="help-block" ng-show="submitted && form.project.$error.required">Required</span>
     </div>
 </div>
@@ -26,7 +41,7 @@
 <div class="form-group" ng-class="{true: 'has-error'}[submitted && form.dueDate.$invalid]">
     <label class="control-label" for="dueDate">Due Date</label>
     <div class="controls">
-        <input class="form-control" type="date" id="dueDate" name="dueDate" ng-model="issueData.DueDate" required/>
+        <input class="form-control" type="date" id="dueDate" name="dueDate" ng-model="issueData.DueDate" ng-disabled="{{isDisabled}}" autocomplete="off" required />
         <span class="help-block" ng-show="submitted && form.dueDate.$error.required">Required</span>
     </div>
 </div>
@@ -34,18 +49,25 @@
 <div class="form-group" ng-class="{true: 'has-error'}[submitted && form.priority.$invalid]">
     <label for="priority">Priority</label>
     <div class="controls">
-        <select class="form-control" id="priority" name="priority" ng-model="issueData.PriorityId" required>
-            <option ng-repeat="priority in priorities" value="{{priority.Id}}">
+        <select ng-if="!isEdit" class="form-control" id="priority" name="priority" ng-model="issueData.PriorityId" ng-disabled="{{isDisabled}}" required>
+            <option ng-if="isView" selected="selected">{{issueData.Priority.Name}}</option>
+            <option ng-if="!isView" ng-repeat="priority in priorities" value="{{priority.Id}}">
                 {{priority.Name}}
             </option>
         </select>
+
+        <select class="form-control" id="priority" name="priority" required
+                ng-if="isEdit"
+                ng-model="issueData.Priority.Id"
+                ng-options="value.Id as value.Name for (key, value) in priorities"></select>
+
         <span class="help-block" ng-show="submitted && form.priority.$error.required">Required</span>
     </div>
 </div>
 
 <div class="form-group">
     <label for="labels">Labels</label>
-    <input type="text" class="form-control" id="labels" placeholder="Labels" ng-model="issueData.StringLabels" ng-keyup="getLabels()" autocomplete="off">
+    <input type="text" class="form-control" id="labels" placeholder="Labels" ng-model="issueData.StringLabels" ng-keyup="getLabels()" autocomplete="off" ng-disabled="{{isDisabled}}">
     <div ng-if="labels.length > 0" class="label-holder">
         <div ng-repeat="label in labels" ng-click="addLabel(label)" class="label-option">{{label.Name}}</div>
     </div>
@@ -55,7 +77,7 @@
 <div class="form-group" ng-class="{true: 'has-error'}[submitted && form.title.$invalid]">
     <label class="control-label" for="title">Title</label>
     <div class="controls">
-        <input type="text" class="form-control" id="title" name="title" placeholder="Title" ng-model="issueData.Title" required>
+        <input type="text" class="form-control" id="title" name="title" placeholder="Title" ng-model="issueData.Title" ng-disabled="{{isDisabled}}" autocomplete="off" required>
         <span class="help-block" ng-show="submitted && form.key.title.required">Required</span>
     </div>
 </div>
@@ -63,7 +85,7 @@
 <div class="form-group" ng-class="{true: 'has-error'}[submitted && form.description.$invalid]">
     <label for="description">Description</label>
     <div class="controls">
-        <textarea class="form-control" placeholder="Description" id="description" name="description" ng-model="issueData.Description" required>{{issueData.Description}}</textarea>
+        <textarea class="form-control" placeholder="Description" id="description" name="description" ng-model="issueData.Description" ng-disabled="{{isDisabled}}" required>{{issueData.Description}}</textarea>
         <span class="help-block" ng-show="submitted && form.description.$error.required">Required</span>
     </div>
 </div>

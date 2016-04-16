@@ -1,37 +1,17 @@
 ﻿<h2 class="projectView">{{issueView}}</h2>
 
-<form name="form" ng-app="app" ng-submit="saveIssue(issueData)">
+<form ng-if="!isDisabled" name="form" ng-app="app" ng-submit="saveIssue(issueData)">
     <div ng-issue-form></div>
     <button type="submit" class="btn btn-primary btn-large" ng-click="submitted=true">Save</button>
 </form>
 
-<h3>Status transition scheme</h3>
-<ul id="statuses">
-    <li><strong>Open</strong></li>
-    <li>
-        In Progress <button class="btn btn-sm btn-info">transition to status</button>
-        <ul>
-            <li>
-                Closed
-            </li>
-        </ul>
-    </li>
-    <li>
-        Resolved <button class="btn btn-sm btn-info">transition to status</button>
-        <ul>
-            <li>
-                Closed
-            </li>
-        </ul>
-        <ul>
-            <li>
-                Reopened
-                <ul>
-                    <li>
-                        Closed
-                    </li>
-                </ul>
-            </li>
-        </ul>
-    </li>
-</ul>
+<form ng-if="isDisabled" name="form" ng-app="app">
+    <div ng-issue-form></div>
+    <a class="btn btn-success" href="#/projects/{{issueData.Project.Id}}">View project - "{{issueData.Project.Name}}"</a>
+    <a ng-if="isProjectLeader" class="btn btn-success btn-large" href="#/issues/{{issueData.Id}}/edit">Edit</a>
+</form>
+
+<div ng-if="isAssignee">
+    <h3>Status transition scheme</h3>
+    <div ng-issue-statuses></div>
+</div>

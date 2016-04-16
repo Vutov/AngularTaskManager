@@ -41,3 +41,10 @@ app.directive("ngIssueForm", [function () {
         templateUrl: 'templates/partial/issue-form.html'
     };
 }]);
+
+app.directive("ngIssueStatuses", [function () {
+    return {
+        restrict: 'A',
+        templateUrl: 'templates/partial/issue-statuses.html'
+    };
+}]);

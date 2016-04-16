@@ -7,7 +7,6 @@ app.controller('IssuesController',
            'pageSize': pageSize
        };
 
-       // TODO Directive
        $scope.predicate = 'DueDate';
        $scope.reverse = true;
        $scope.order = function (predicate) {
@@ -142,7 +141,7 @@ app.controller('AddIssueController',
        });
 
        $scope.updatePriorities = function() {
-           $scope.priorities = _($scope.projects).find(p => p.Id == $scope.currentProject).Priorities;
+           $scope.priorities = _($scope.projects).find(p => p.Id == $scope.issueData.ProjectId).Priorities;
        }
 
        $scope.getLabels = function() {
@@ -202,19 +201,160 @@ app.controller('AddIssueController',
    }
 );
 
-
 app.controller('ViewIssueController',
-   function ($scope, $location, $routeParams, authService, notifyService, issueService) {
-       $scope.issueView = "Issue";
-       $scope.isDiabled = true;
-       
-       issueService.getIssueById(
-           $routeParams.Id,
-           function success(data) {
-               $scope.issueData = data;
-           }, function error(err) {
-               notifyService.showError("Failed adding issue", err);
-           }
-       );
-   }
+    function($scope, $location, $routeParams, authService, notifyService, issueService, projectService) {
+        $scope.issueView = "Issue";
+        $scope.isView = true;
+        $scope.isDisabled = true;
+
+        issueService.getIssueById(
+            $routeParams.id,
+            function success(data) {
+                data.DueDate = new Date(data.DueDate);
+                data.StringLabels = _(data.Labels).map(c => c.Name).value().join(", ");
+                $scope.issueData = data;
+
+                $scope.isAssignee = data.Assignee.Username === authService.getCurrentUser().userName;
+
+                projectService.getProjectById(
+                    $scope.issueData.Project.Id,
+                    function success(projectData) {
+                        var lead = projectData.Lead.Username;
+                        $scope.isProjectLeader = lead === authService.getCurrentUser().userName;
+                    }, function error(err) {
+                        notifyService.showError("Failed loading data...", err);
+                    });
+            }, function error(err) {
+                notifyService.showError("Failed loading data...", err);
+            }
+        );
+
+        $scope.changeStatus = function(statusId) {
+            issueService.changeStatus(
+                $routeParams.id,
+                statusId,
+                function success(data) {
+                    issueService.getIssueById(
+                        $routeParams.id,
+                        function success(issue) {
+                            $scope.issueData.Status = issue.Status;
+                        },
+                        function error(err) {
+                            notifyService.showError(err.Message, err);
+                        });
+                }, function error(err) {
+                    notifyService.showError(err.Message, err);
+                }
+            );
+        }
+    }
+);
+
+app.controller('EditIssueController',
+    function($scope, $location, $routeParams, authService, notifyService, issueService, lableService, projectService, userService) {
+        $scope.issueView = "Edit Issue";
+        $scope.isEdit = true;
+        $scope.setProject = true;
+
+        userService.getAllUsers(function success(data) {
+            $scope.users = data;
+        }, function error(err) {
+            notifyService.showError("Failed loading data...", err);
+        });
+
+        issueService.getIssueById(
+            $routeParams.id,
+            function success(data) {
+                data.DueDate = new Date(data.DueDate);
+                data.StringLabels = _(data.Labels).map(c => c.Name).value().join(", ");
+                $scope.currentProject = data.Project;
+                $scope.issueData = data;
+
+                $scope.isAssignee = data.Assignee.Username === authService.getCurrentUser().userName;
+
+                projectService.getAllProjects(function success(projects) {
+                    $scope.priorities = _(projects).find(p => p.Id == data.Project.Id).Priorities;
+                }, function error(err) {
+                    notifyService.showError("Failed loading data...", err);
+                });
+            }, function error(err) {
+                notifyService.showError("Failed loading data...", err);
+            }
+        );
+
+        $scope.getLabels = function() {
+            var filter = $scope.issueData.StringLabels;
+            if (filter) {
+                var allFilters = filter.split(',');
+                var lastFilter = allFilters[allFilters.length - 1].trim();
+
+                if (lastFilter.length >= 2) {
+                    lableService.getLablesFor(
+                        lastFilter,
+                        function success(data) {
+                            $scope.labels = data;
+                        }, function error(err) {
+                            notifyService.showError("Failed loading data...", err);
+                        }
+                    );
+                } else {
+                    $scope.labels = [];
+                }
+            }
+        };
+
+        $scope.addLabel = function(label) {
+            var lastComma = $scope.issueData.StringLabels.lastIndexOf(',');
+            if (lastComma !== -1) {
+                $scope.issueData.StringLabels = $scope.issueData.StringLabels.slice(0, lastComma) + ', ';
+            } else {
+                $scope.issueData.StringLabels = '';
+            }
+
+            $scope.issueData.StringLabels += label.Name + ', ';
+            $scope.labels = [];
+        }
+
+        $scope.saveIssue = function (issueData) {
+            issueData.Labels = [];
+            issueData.AssigneeId = issueData.Assignee.Id;
+            issueData.PriorityId = issueData.Priority.Id;
+
+            if (issueData.StringLabels) {
+                issueData.StringLabels.split(",").forEach(function(l) {
+                    if (l.trim()) {
+                        issueData.Labels.push({ Name: l.trim() });
+                    }
+                }); 
+            }
+
+            issueService.updateIssue(
+                issueData,
+                function success(data) {
+                    $location.path('/issues/' + data.Id);
+                }, function error(err) {
+                    notifyService.showError("Failed updating issue", err);
+                }
+            );
+        }
+
+        $scope.changeStatus = function(statusId) {
+            issueService.changeStatus(
+                $routeParams.id,
+                statusId,
+                function success(data) {
+                    issueService.getIssueById(
+                        $routeParams.id,
+                        function success(issue) {
+                            $scope.issueData.Status = issue.Status;
+                        },
+                        function error(err) {
+                            notifyService.showError(err.Message, err);
+                        });
+                }, function error(err) {
+                    notifyService.showError(err.Message, err);
+                }
+            );
+        }
+    }
 );

@@ -4,7 +4,7 @@
     <div class="form-group" ng-class="{true: 'has-error'}[submitted && form.username.$invalid]">
         <label class="control-label" for="username">Username</label>
         <div class="controls">
-            <input class="form-control" type="text" id="username" name="username" ng-model="userData.Username" required />
+            <input class="form-control" type="text" id="username" name="username" ng-model="userData.Username" autocomplete="off" required />
             <span class="help-block" ng-show="submitted && form.username.$error.required">Required</span>
         </div>
     </div>
@@ -12,7 +12,7 @@
     <div class="form-group" ng-class="{true: 'has-error'}[submitted && form.password.$invalid]">
         <label class="control-label" for="password">Password</label>
         <div class="controls">
-            <input class="form-control" type="password" id="password" name="password" ng-model="userData.Password" required />
+            <input class="form-control" type="password" id="password" name="password" ng-model="userData.Password" autocomplete="off" required />
             <span class="help-block" ng-show="submitted && form.password.$error.required">Required</span>
         </div>
     </div>
