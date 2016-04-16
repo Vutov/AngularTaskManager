@@ -15,6 +15,14 @@ footer > div {
         opacity: 0.7;
     }
 
+td {
+    width: 33%;
+}
+
+thead > tr {
+    text-align: center;
+}
+
 .sortorder:after {
     content: '\25b2';
 }
@@ -80,4 +88,22 @@ footer > div {
     border: 1px solid grey;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
+}
+
+.loading {
+    opacity: 0.7;
+}
+
+.absolute-center {
+    position: absolute;
+    top: 20%;
+    left: 50%;
+}
+
+.sk-cube-grid, .sk-cube {
+    background-color: grey;
+}
+
+.buffer {
+    margin: 15px;
 }

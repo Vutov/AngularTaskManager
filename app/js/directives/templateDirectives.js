@@ -48,3 +48,10 @@ app.directive("ngIssueStatuses", [function () {
         templateUrl: 'templates/partial/issue-statuses.html'
     };
 }]);
+
+app.directive("spinKit", [function () {
+    return {
+        restrict: 'A',
+        templateUrl: 'lib/spinKit/spinKit.html'
+    };
+}]);
