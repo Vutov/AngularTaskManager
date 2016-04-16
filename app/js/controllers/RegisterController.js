@@ -2,7 +2,6 @@
 
 app.controller('RegisterController',
     function ($scope, $location, authService, notifyService) {
-
         $scope.userData = {};
 
         $scope.register = function(userData) {

@@ -1,8 +1,8 @@
 ﻿<div class="dashboard">
     <h1>Admin Dashboard</h1>
 
-    <button class="btn btn-lg btn-success" ng-click="viewProjects()">View All Projects</button>
-    <button class="btn btn-lg btn-success" ng-click="addProject()">Add Project</button>
+    <a class="btn btn-lg btn-success" href="#/projects">View All Projects</a>
+    <a class="btn btn-lg btn-success" href="#/projects/add">Add Project</a>
     <div class="btn btn-lg btn-success" ng-click="showAllUsers()" ng-toggle-users ng-show-users="{{showUsers}}">Show Users</div>
     <h3 ng-if="showUsers" class="inline">Total users: {{users.length}}</h3>
 

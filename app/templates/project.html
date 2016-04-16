@@ -3,7 +3,7 @@
 <div ng-if="!isDisabled">
     <form name="form" ng-app="app" ng-submit="saveProject(project)">
         <div ng-project-form></div>
-        <button ng-if="isProjectLeader || authService.isAdmin()" type="submit" ng-click="addIssue()" class="btn btn-success">Add Issue</button>
+        <a ng-if="isProjectLeader || authService.isAdmin()" type="submit" ng-click="addIssue()" class="btn btn-success">Add Issue</a>
         <button type="submit" ng-click="submitted=true" class="btn btn-primary btn-large">Save</button>
     </form>
 </div>
@@ -11,8 +11,8 @@
 <div ng-if="isDisabled">
     <form name="form" ng-app="app">
         <div ng-project-form></div>
-        <button ng-if="isProjectLeader || authService.isAdmin()" type="submit" ng-click="addIssue()" class="btn btn-success">Add Issue</button>
-        <button ng-if="isProjectLeader || authService.isAdmin()" type="submit" ng-click="editProject()" class="btn btn-success">Edit Project</button>
+        <a ng-if="isProjectLeader || authService.isAdmin()" type="submit" href="#/projects/{{project.Id}}/add-issue" class="btn btn-success">Add Issue</a>
+        <a ng-if="isProjectLeader || authService.isAdmin()" type="submit" href="#/projects/{{project.Id}}/edit" class="btn btn-success">Edit Project</a>
     </form>
 </div>
 
@@ -20,10 +20,11 @@
     <h1>Issues</h1>
     <table class="table table-striped" ng-if="issues.length > 0">
         <thead>
-            <tr ng-issue-header-view></tr>
+        <tr ng-issue-header-view></tr>
         </thead>
         <tbody>
-            <tr ng-issue-view ng-repeat="issue in issues | orderBy:predicate:reverse"></tr>
+        <tr ng-issue-view ng-repeat="issue in issues | orderBy:predicate:reverse"></tr>
         </tbody>
     </table>
+    <div ng-if="issues.length == 0">No issues</div>
 </div>

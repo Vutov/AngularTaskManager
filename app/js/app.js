@@ -31,6 +31,14 @@ app.config(function ($routeProvider) {
         }
     });
 
+    $routeProvider.when('/projects/add-issue', {
+        templateUrl: 'templates/issue.html',
+        controller: 'AddIssueController',
+        access: {
+            requiresLogin: true,
+        }
+    });
+
     $routeProvider.when('/projects/add', {
         templateUrl: 'templates/project.html',
         controller: 'AddProjectController',
@@ -81,7 +89,7 @@ app.config(function ($routeProvider) {
 
     $routeProvider.when('/projects/:id/add-issue', {
         templateUrl: 'templates/issue.html',
-        controller: 'AddIssuesController',
+        controller: 'AddIssueToProjectController',
         access: {
             requiresLogin: true,
         }

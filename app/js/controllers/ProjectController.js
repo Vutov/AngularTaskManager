@@ -5,7 +5,6 @@ app.controller('ViewProjectController',
        $scope.isDisabled = true;
        $scope.projectView = "Project";
 
-       // TODO extract same
        projectService.getProjectById(
               $routeParams.id,
               function success(data) {
@@ -17,13 +16,12 @@ app.controller('ViewProjectController',
                   } else {
                       $scope.isProjectLeader = false;
                   }
-
-                  // TODO transition id 
               },
               function error(err) {
                   notifyService.showError("Failed loading data...", err);
               });
 
+       // TODO Directive
        $scope.predicate = 'DueDate';
        $scope.reverse = true;
        $scope.order = function (predicate) {
@@ -40,13 +38,8 @@ app.controller('ViewProjectController',
                   notifyService.showError("Failed loading data...", err);
               });
 
-       // TODO same
-       $scope.addIssue = function () {
-           $location.path("projects/" + $routeParams.id + "/add-issue");
-       }
-
-       $scope.editProject = function () {
-           $location.path("projects/" + $routeParams.id + "/edit");
+       $scope.viewIssue = function(id) {
+           $location.path("issues/" + id);
        }
    }
 );
@@ -56,7 +49,6 @@ app.controller('EditProjectController',
        $scope.isDisabled = false;
        $scope.projectView = "Edit Project";
 
-       // TODO extract same
        projectService.getProjectById(
               $routeParams.id,
               function success(data) {
@@ -68,8 +60,6 @@ app.controller('EditProjectController',
                   } else {
                       $scope.isProjectLeader = false;
                   }
-
-                  // TODO transition id 
 
                   userService.getAllUsers(function success(data) {
                       $scope.leaders = data.sort(function(a, b) {
@@ -83,25 +73,23 @@ app.controller('EditProjectController',
                   notifyService.showError("Failed loading data...", err);
               });
 
-       // TODO Same
-       $scope.addIssue = function () {
-           $location.path("projects/" + $routeParams.id + "/add-issue");
-       }
-
        $scope.saveProject = function (projectData) {
-           // TODO Same
            projectData.LeadId = projectData.Lead.Id;
            projectData.Labels = [];
            projectData.Priorities = [];
 
            if (projectData.StringLabels) {
                projectData.StringLabels.split(",").forEach(function(l) {
-                   projectData.Labels.push({ Name: l.trim() });
+                   if (l.trim()) {
+                       projectData.Labels.push({ Name: l.trim() });
+                   }
                }); 
            }
            
            projectData.StringPriorities.split(",").forEach(function(p) {
-               projectData.Priorities.push({ Name: p.trim() });
+               if (p.trim()) {
+                   projectData.Priorities.push({ Name: p.trim() });
+               }
            });
 
            projectService.updateProjectById(
@@ -114,6 +102,10 @@ app.controller('EditProjectController',
                    notifyService.showError("Failed loading data...", err);
                });
        }
+
+       $scope.addIssue = function() {
+           $location.path('projects/'+ $routeParams.id +'/add-issue');
+       }
    }
 );
 
@@ -121,13 +113,7 @@ app.controller('AddProjectController',
    function ($scope, $routeParams, $route, $location, projectService, notifyService, pageSize, userService) {
        $scope.isDisabled = false;
        $scope.projectView = "Add Project";
-
        $scope.project = {};
-
-       // TODO same
-       $scope.addIssue = function () {
-           $location.path("projects/" + $routeParams.id + "/add-issue");
-       }
 
        userService.getAllUsers(function success(data) {
            $scope.leaders = data.sort(function(a, b) {
@@ -138,19 +124,22 @@ app.controller('AddProjectController',
        });
 
        $scope.saveProject = function (projectData) {
-           // TODO Same
            projectData.LeadId = projectData.Lead.Id;
            projectData.Labels = [];
            projectData.Priorities = [];
 
            if (projectData.StringLabels) {
                projectData.StringLabels.split(",").forEach(function(l) {
-                   projectData.Labels.push({ Name: l.trim() });
+                   if (l.trim()) {
+                       projectData.Labels.push({ Name: l.trim() });
+                   }
                }); 
            }
            
            projectData.StringPriorities.split(",").forEach(function(p) {
-               projectData.Priorities.push({ Name: p.trim() });
+               if (p.trim()) {
+                   projectData.Priorities.push({ Name: p.trim() });
+               }
            });
 
            projectService.addNewProject(
@@ -161,6 +150,10 @@ app.controller('AddProjectController',
                function error(err) {
                    notifyService.showError("Failed loading data...", err);
                });
+       }
+
+       $scope.addIssue = function() {
+           $location.path('projects/add-issue');
        }
    }
 );
@@ -177,9 +170,5 @@ app.controller('ViewAllProjectsController',
               function error(err) {
                   notifyService.showError("Failed loading data...", err);
               });
-
-       $scope.viewProject = function(id) {
-           $location.path("projects/" + id);
-       }
    }
 );

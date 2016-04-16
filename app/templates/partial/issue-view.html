@@ -1,5 +1,5 @@
 ﻿<tr>
-    <td>{{issue.Title}}</td>
+    <td class="hoverable" ng-click="viewIssue(issue.Id)">{{issue.Title}}</td>
     <td>{{issue.Description}}</td>
     <td>{{issue.DueDate | date:'dd-MM-yyyy'}}</td>
     <td>{{issue.Author.Username}}</td>

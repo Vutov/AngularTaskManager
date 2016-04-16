@@ -4,14 +4,6 @@ app.controller('AdminController',
    function ($scope, $location, userService, notifyService, pageSize) {
        $scope.showUsers = false;
        $scope.isAdmin = false;
-       
-       $scope.viewProjects = function() {
-           $location.path('/projects');
-       }
-
-       $scope.addProject = function () {
-           $location.path('/projects/add');
-       }
 
        $scope.makeAdmin = function (id) {
            var userData = { userId: id };

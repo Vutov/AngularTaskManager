@@ -7,16 +7,13 @@ app.controller('IssuesController',
            'pageSize': pageSize
        };
 
+       // TODO Directive
        $scope.predicate = 'DueDate';
        $scope.reverse = true;
        $scope.order = function (predicate) {
            $scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
            $scope.predicate = predicate;
        };
-
-       $scope.viewProject = function (id) {
-           $location.path("/projects/" + id);
-       }
 
        $scope.getIssues = function () {
            if (authService.isLoggedIn()) {
@@ -34,19 +31,103 @@ app.controller('IssuesController',
 
        $scope.getIssues();
 
-       $scope.addProject = function () {
-           $location.path('/projects/add');
+       $scope.viewProject = function (id) {
+           $location.path('/projects/' + id);
        }
 
-       $scope.viewAllProjects = function () {
-           $location.path("/projects");
+       $scope.viewIssue = function (id) {
+           $location.path('/issues/' + id);
        }
    }
 );
 
-app.controller('AddIssuesController',
-   function ($scope, $location, authService, issueService, userService, projectService, lableService, notifyService, pageSize, _) {
+app.controller('AddIssueToProjectController',
+   function ($scope, $location, $routeParams, authService, issueService, userService, projectService, lableService, notifyService, pageSize, _) {
        $scope.issueView = "Add Issue";
+       $scope.setProject = true;
+       $scope.issueData = {};
+
+       userService.getAllUsers(function success(data) {
+           $scope.users = data;
+       }, function error(err) {
+           notifyService.showError("Failed loading data...", err);
+       });
+
+       projectService.getProjectById(
+           $routeParams.id,
+           function success(data) {
+               $scope.currentProject = data;
+               $scope.priorities = data.Priorities;
+           }, function error(err) {
+               notifyService.showError("Failed loading data...", err);
+           });
+
+       $scope.updatePriorities = function() {
+           $scope.priorities = _($scope.projects).find(p => p.Id == $scope.issueData.ProjectId).Priorities;
+       }
+
+       $scope.getLabels = function() {
+           var filter = $scope.issueData.StringLabels;
+           if (filter) {
+               var allFilters = filter.split(',');
+               var lastFilter = allFilters[allFilters.length - 1].trim();
+
+               if (lastFilter.length >= 2) {
+                   lableService.getLablesFor(
+                       lastFilter,
+                       function success(data) {
+                           $scope.labels = data;
+                       }, function error(err) {
+                           notifyService.showError("Failed loading data...", err);
+                       }
+                   );
+               } else {
+                   $scope.labels = [];
+               }
+           }
+       }; 
+
+       $scope.addLabel =function (label) {
+           var lastComma = $scope.issueData.StringLabels.lastIndexOf(',');
+           if (lastComma !== -1) {
+               $scope.issueData.StringLabels = $scope.issueData.StringLabels.slice(0, lastComma) + ', ';
+           } else {
+               $scope.issueData.StringLabels = '';
+           }  
+           
+           $scope.issueData.StringLabels += label.Name + ', ';
+           $scope.labels = [];
+       }
+
+       $scope.saveIssue = function (issueData) {
+           issueData.projectId = $scope.currentProject.Id;
+           issueData.Labels = [];
+
+           if (issueData.StringLabels) {
+               issueData.StringLabels.split(",").forEach(function(l) {
+                   if (l.trim()) {
+                       issueData.Labels.push({ Name: l.trim() });
+                   }
+               }); 
+           }
+
+           issueService.addIssue(
+               issueData,
+               function success(data) {
+                   $location.path('/issues/' + data.Id);
+               }, function error(err) {
+                   notifyService.showError("Failed adding issue", err);
+               }
+           );
+       }
+   }
+);
+
+app.controller('AddIssueController',
+   function ($scope, $location, $routeParams, authService, issueService, userService, projectService, lableService, notifyService, pageSize, _) {
+       $scope.issueView = "Add Issue";
+       $scope.setProject = false;
+       $scope.issueData = {};
 
        userService.getAllUsers(function success(data) {
            $scope.users = data;
@@ -61,30 +142,79 @@ app.controller('AddIssuesController',
        });
 
        $scope.updatePriorities = function() {
-           $scope.priorities = _($scope.projects).find(p => p.Id == $scope.issueData.ProjectId).Priorities;
+           $scope.priorities = _($scope.projects).find(p => p.Id == $scope.currentProject).Priorities;
        }
 
        $scope.getLabels = function() {
            var filter = $scope.issueData.StringLabels;
-           var allFilters = filter.split(',');
-           var lastFilter = allFilters[allFilters.length - 1].trim();
+           if (filter) {
+               var allFilters = filter.split(',');
+               var lastFilter = allFilters[allFilters.length - 1].trim();
 
-           if (lastFilter.length >= 2) {
-               lableService.getLablesFor(
-                   lastFilter,
-                   function success(data) {
-                       $scope.labels = data;
-                   }, function error(err) {
-                       notifyService.showError("Failed loading data...", err);
-                   }
-               );
-           } else {
-               $scope.labels = [];
+               if (lastFilter.length >= 2) {
+                   lableService.getLablesFor(
+                       lastFilter,
+                       function success(data) {
+                           $scope.labels = data;
+                       }, function error(err) {
+                           notifyService.showError("Failed loading data...", err);
+                       }
+                   );
+               } else {
+                   $scope.labels = [];
+               }
            }
        }; 
 
-       $scope.saveIssue = function (issueData) {
-
+       $scope.addLabel = function (label) {
+           var lastComma = $scope.issueData.StringLabels.lastIndexOf(',');
+           if (lastComma !== -1) {
+               $scope.issueData.StringLabels = $scope.issueData.StringLabels.slice(0, lastComma) + ', ';
+           } else {
+               $scope.issueData.StringLabels = '';
+           }  
+           
+           $scope.issueData.StringLabels += label.Name + ', ';
+           $scope.labels = [];
        }
+
+       $scope.saveIssue = function (issueData) {
+           issueData.projectId = $scope.currentProject;
+           issueData.Labels = [];
+
+           if (issueData.StringLabels) {
+               issueData.StringLabels.split(",").forEach(function(l) {
+                   if (l.trim()) {
+                       issueData.Labels.push({ Name: l.trim() });
+                   }
+               }); 
+           }
+
+           issueService.addIssue(
+               issueData,
+               function success(data) {
+                   $location.path('/issues/' + data.Id);
+               }, function error(err) {
+                   notifyService.showError("Failed adding issue", err);
+               }
+           );
+       }
+   }
+);
+
+
+app.controller('ViewIssueController',
+   function ($scope, $location, $routeParams, authService, notifyService, issueService) {
+       $scope.issueView = "Issue";
+       $scope.isDiabled = true;
+       
+       issueService.getIssueById(
+           $routeParams.Id,
+           function success(data) {
+               $scope.issueData = data;
+           }, function error(err) {
+               notifyService.showError("Failed adding issue", err);
+           }
+       );
    }
 );
