@@ -55,3 +55,17 @@ app.directive("spinKit", [function () {
         templateUrl: 'lib/spinKit/spinKit.html'
     };
 }]);
+
+app.directive("ngCommentForm", [function () {
+    return {
+        restrict: 'A',
+        templateUrl: 'templates/partial/comment-form.html'
+    };
+}]);
+
+app.directive("ngCommentView", [function () {
+    return {
+        restrict: 'A',
+        templateUrl: 'templates/partial/comment-view.html'
+    };
+}]);

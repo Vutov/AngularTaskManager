@@ -15,3 +15,13 @@
     <h3>Status transition scheme</h3>
     <div ng-issue-statuses></div>
 </div>
+
+<div ng-if="isDisabled">
+    <h2 class="projectView">Comments</h2>
+    <div ng-comment-view ng-repeat="comment in comments"></div>
+    <div ng-if="comments.length === 0">No comments</div>
+    <form ng-if="isProjectLeader || isRelated" name="form" ng-app="app" ng-submit="saveComment(comment);">
+        <div ng-comment-form></div>
+        <button type="submit" class="btn btn-primary btn-large" ng-click="submitted=true;">Save</button>
+    </form>
+</div>

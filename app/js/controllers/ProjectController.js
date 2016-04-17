@@ -225,16 +225,36 @@ app.controller('AddProjectController',
 );
 
 app.controller('ViewAllProjectsController',
-   function ($scope, $routeParams, $location, projectService, notifyService) {
+   function ($scope, $routeParams, $location, projectService, notifyService, pageSize) {
        $scope.isDisabled = true;
        $scope.projectView = "All Project";
 
+       $scope.projectParams = {
+           'startPage': 1,
+           'pageSize': pageSize * 2 - 1
+       };
+
+       $scope.getProjects = function () {
+           projectService.getProjectsPaging(
+               $scope.projectParams,
+               function success(data) {
+                   $scope.totalProjects = data.TotalPages * $scope.projectParams.pageSize ,
+                       $scope.projects = data.Projects;
+               },
+               function error(err) {
+                   notifyService.showError("Failed loading data...", err);
+               });
+       }
+
        projectService.getAllProjects(
-              function success(data) {
-                  $scope.projects = data;
-              },
-              function error(err) {
-                  notifyService.showError("Failed loading data...", err);
-              });
+           function success(data) {
+               $scope.allProjects = data;
+           },
+           function error(err) {
+               notifyService.showError("Failed loading data...", err);
+           }
+       );
+
+       $scope.getProjects();
    }
 );

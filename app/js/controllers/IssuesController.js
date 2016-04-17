@@ -202,10 +202,12 @@ app.controller('AddIssueController',
 );
 
 app.controller('ViewIssueController',
-    function($scope, $location, $routeParams, authService, notifyService, issueService, projectService) {
+    function($scope, $location, $routeParams, authService, notifyService, issueService, projectService, commentService) {
         $scope.issueView = "Issue";
         $scope.isView = true;
         $scope.isDisabled = true;
+
+        var currentUsername = authService.getCurrentUser().userName;
 
         issueService.getIssueById(
             $routeParams.id,
@@ -214,16 +216,27 @@ app.controller('ViewIssueController',
                 data.StringLabels = _(data.Labels).map(c => c.Name).value().join(", ");
                 $scope.issueData = data;
 
-                $scope.isAssignee = data.Assignee.Username === authService.getCurrentUser().userName;
+                $scope.isAssignee = data.Assignee.Username === currentUsername;
 
                 projectService.getProjectById(
                     $scope.issueData.Project.Id,
                     function success(projectData) {
-                        var lead = projectData.Lead.Username;
-                        $scope.isProjectLeader = lead === authService.getCurrentUser().userName;
+                        $scope.isProjectLeader = projectData.Lead.Username === currentUsername;
                     }, function error(err) {
                         notifyService.showError("Failed loading data...", err);
                     });
+
+                projectService.getIssuesForProjectById(
+                    $scope.issueData.Project.Id,
+                    function success(data) {
+                        $scope.issues = data;
+                        $scope.isRelated = _(data).some(i => i.Assignee.Username === "Kamigawa1234@gmail.com");
+                    },
+                    function error(err) {
+                        notifyService.showError("Failed loading data...", err);
+                    }
+                );
+
             }, function error(err) {
                 notifyService.showError("Failed loading data...", err);
             }
@@ -244,6 +257,32 @@ app.controller('ViewIssueController',
                         });
                 }, function error(err) {
                     notifyService.showError(err.Message, err);
+                }
+            );
+        }
+
+        var getCommentForIssueId =function() {
+            commentService.getCommentForIssueId(
+                $routeParams.id,
+                function success(data) {
+                    $scope.comments = data;
+                }, function error(err) {
+                    notifyService.showError(err.Message, err);
+                }
+            );
+        }
+
+        getCommentForIssueId();
+
+        $scope.saveComment = function (comment) {
+            commentService.saveComment(
+                $routeParams.id,
+                comment,
+                function success(data) {
+                    getCommentForIssueId();
+                    notifyService.showInfo("Comment added!");
+                }, function error(err) {
+                    notifyService.showError("Failed saving comment", err);
                 }
             );
         }

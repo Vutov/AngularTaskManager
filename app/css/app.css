@@ -105,5 +105,14 @@ thead > tr {
 }
 
 .buffer {
-    margin: 15px;
+    margin: 20px;
+}
+
+.row {
+    margin-right: 0;
+    margin-left: 0;
+}
+
+.projects-min-200 {
+    min-height: 200px;
 }

@@ -1,7 +1,15 @@
 ﻿<div class="dashboard">
     <h1>{{projectView}}</h1>
     <label class="margin-20">Search: <input ng-model="searchText"></label>
-    <div>
-        <div class="col-sm-4 padding-10" ng-project-view ng-repeat="project in projects | orderBy: project.Id | filter: searchText"></div>
+    <div class="row projects-min-200">
+        <div ng-if="searchText" ng-project-view ng-repeat="project in allProjects | orderBy: project.Id | filter: searchText"></div>
+        <div ng-if="!searchText" ng-project-view ng-repeat="project in projects | orderBy: project.Id"></div>
     </div>
+
+    <pagination ng-if="!searchText"
+                total-items="totalProjects" ng-model="projectParams.startPage"
+                items-per-page="projectParams.pageSize" ng-change="getProjects()"
+                max-size="9" boundary-links="true"
+                class="aligner">
+    </pagination>
 </div>
