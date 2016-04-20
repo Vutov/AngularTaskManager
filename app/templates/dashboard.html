@@ -26,7 +26,10 @@
         </tbody>
     </table>
 
-    <pagination total-items="allIssues" ng-model="issuesParams.startPage"
+    <div ng-if="allIssues == 0">No Issues</div>
+
+    <pagination ng-if="allIssues > issuesParams.pageSize"
+                total-items="allIssues" ng-model="issuesParams.startPage"
                 items-per-page="issuesParams.pageSize" ng-change="getIssues()"
                 max-size="9" boundary-links="true"
                 class="aligner">
