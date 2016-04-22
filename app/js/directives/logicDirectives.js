@@ -23,9 +23,9 @@ app.directive("ngToggleUsers", [function () {
             var controllScope = scope;
             $(elem).click(function () {
                 if (controllScope.showUsers) {
-                    this.innerText = this.innerText.replace('Hide', 'Show');
+                    this.innerHTML = this.innerHTML.replace('Hide', 'Show');
                 } else {
-                    this.innerText = this.innerText.replace('Show', 'Hide');
+                    this.innerHTML = this.innerHTML.replace('Show', 'Hide');
                 }
 
                 controllScope.showUsers = !controllScope.showUsers;
